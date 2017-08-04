@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% block title %}{% endblock %}
+    </title>
+</head>
+<body>
+    <div class="header">
+        {% block header %}
+            <h1>Хэдер</h1>
+        {% endblock %}
+        <hr>
+    </div>
+    {% block content %}
+    {% endblock %}
+    <div class="footer">
+        <hr>
+        <small>2017</small>
+    </div>
+</body>
+</html>

@@ -1,0 +1,25 @@
+{% extends 'tracker/base.html' %}
+{% block title %}
+    Трекинг
+{% endblock %}
+{% block header %}
+    <h3>
+        Список принятых вагонов
+    </h3>
+{% endblock %}
+{% block content %}
+    <a href="{% url 'tracker:new' %}">Принять вагон</a>
+    {% if tracking_list %}
+        <ul>
+            {% for track in tracking_list %}
+                <li><a href="{% url 'tracker:detail' track.id %}">
+                    {{ track.time }}
+                    {{ track.railcar }}
+                    {{ track.amount.normalize }} кг.
+                    {{ track.comment }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+    <p>Нет данных для отображения.</p>
+{% endif %}
+{% endblock %}

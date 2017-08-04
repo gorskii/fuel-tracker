@@ -1,0 +1,17 @@
+{% extends 'tracker/base.html' %}
+{% block title %}
+    Приём топлива
+{% endblock %}
+{% block header %}
+    <h3>
+        <a href="{% url 'tracker:index' %}">Главная</a>
+    </h3>
+{% endblock %}
+{% block content %}
+    <h1>Приём топлива</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Принять" />
+    </form>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'tracker/base.html' %}
+
+{% block title %}
+    {{ track.railcar }}
+{% endblock %}
+
+{% block header %}
+    <h3>
+        <a href="{% url 'tracker:index' %}">Главная</a>
+    </h3>
+{% endblock %}
+
+{% block content %}
+    <h3>{{ track.railcar }}</h3>
+    <p>Время: {{ track.time }}</p>
+    <p>Количество: {{ track.amount.normalize }} кг.</p>
+    <p>Комментарий: {{ track.comment }}</p>
+{% endblock %}
+
