@@ -5,14 +5,12 @@
 {% endblock %}
 
 {% block header %}
-    <h3>
-        <a href="{% url 'tracker:index' %}">Главная</a>
-    </h3>
+    <h3>Вагон {{ track.railcar }}</h3>
+    <a class="btn" href="{% url 'tracker:index' %}">Назад</a>
 {% endblock %}
 
 {% block content %}
-    <h3>{{ track.railcar }}</h3>
-    <p>Время: {{ track.time }}</p>
+    <p>Время: {{ track.time|date:"j.m.Y H:i:s" }}</p>
     <p>Количество: {{ track.amount.normalize }} кг.</p>
     <p>Комментарий: {{ track.comment }}</p>
 {% endblock %}

@@ -9,7 +9,7 @@ from .models import Tracking
 
 class IndexView(generic.ListView):
     template_name = 'tracker/index.html'
-    queryset = Tracking.objects.all().order_by('-time')[:10]
+    queryset = Tracking.objects.all().order_by('-time')
     context_object_name = 'tracking_list'
 
 # def index(request):  # Показываем список треков

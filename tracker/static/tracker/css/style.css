@@ -1,0 +1,79 @@
+/**************** HEADER *****************/
+
+.modal-header {
+    color: white;
+    background-color: #1564a9;
+    position: fixed;
+    top: 0;
+    height: 150px;
+    width: 100%;
+    z-index: 1;
+}
+
+.modal-header .container {
+    position: relative;
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
+.modal-header a {
+    color: white;
+}
+
+.modal-header .btn {
+    border: solid white 1px;
+    color: white;
+}
+
+.modal-header .btn:hover {
+    border: solid white 1px;
+    /*color: white;*/
+    background-color: #1e73b6;
+}
+
+.modal-header h3 {
+    margin-top: 0;
+}
+
+/************** HEADER END ***************/
+
+/***************** MAIN ******************/
+
+main .container {
+    margin-top: 150px;
+    margin-bottom: 50px;
+}
+
+.table-responsive {
+    width: 100%;
+    margin: 15px 0px 15px 0px;
+}
+
+/*************** MAIN END ****************/
+
+form {
+    margin: 16px 0px 16px 0px;
+}
+
+form .btn {
+    color: white;
+    background-color: #1564a9;
+}
+
+form .btn:hover {
+    color: white;
+    background-color: #1e73b6;
+}
+
+/**************** FOOTER ****************/
+.modal-footer {
+    text-align: left;
+    color: #666;
+    background-color: #333;
+    position: fixed;
+    bottom: 0;
+    height: 50px;
+    width: 100%;
+}
+
+/************** FOOTER END **************/

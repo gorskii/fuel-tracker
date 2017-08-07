@@ -1,5 +1,6 @@
 from django.db import models
-from django.utils import timezone
+from django.utils import timezone, formats
+from django.template.defaultfilters import date
 
 
 class Bills(models.Model):  # Список платежей
@@ -25,7 +26,7 @@ class Railcars(models.Model):  # Вагоны
     volume = models.DecimalField(max_digits=10, decimal_places=4)
 
     def __str__(self):
-        return 'Вагон {}'.format(self.railcar)
+        return str(self.railcar)
 
 
 class Tracking(models.Model):  # Отслеживание вагонов
@@ -33,3 +34,8 @@ class Tracking(models.Model):  # Отслеживание вагонов
     railcar = models.ForeignKey(Railcars, on_delete=models.PROTECT)
     amount = models.DecimalField(max_digits=10, decimal_places=4)
     comment = models.TextField(max_length=200, blank=True, default='')
+
+    def __str__(self):
+        _datetime = self.time.astimezone(timezone.get_current_timezone())
+        return '{}: {}'.format(formats.date_format(_datetime, 'SHORT_DATETIME_FORMAT'),
+                               self.railcar)

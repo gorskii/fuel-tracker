@@ -6,20 +6,35 @@
     <h3>
         Список принятых вагонов
     </h3>
+    <a class="btn" href="{% url 'tracker:new' %}">Принять вагон</a>
 {% endblock %}
 {% block content %}
-    <a href="{% url 'tracker:new' %}">Принять вагон</a>
     {% if tracking_list %}
-        <ul>
-            {% for track in tracking_list %}
-                <li><a href="{% url 'tracker:detail' track.id %}">
-                    {{ track.time }}
-                    {{ track.railcar }}
-                    {{ track.amount.normalize }} кг.
-                    {{ track.comment }}</a></li>
-            {% endfor %}
-        </ul>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                <tr>
+                    <th>№</th>
+                    <th>Время</th>
+                    <th>Номер вагона</th>
+                    <th>Количество</th>
+                    <th>Комментарий</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for track in tracking_list %}
+                    <tr>
+                        <td><a href="{% url 'tracker:detail' track.id %}">{{ track.id }}</a></td>
+                        <td>{{ track.time|date:"d.m.y H:i:s" }}</td>
+                        <td>{{ track.railcar }}</td>
+                        <td>{{ track.amount.normalize }}</td>
+                        <td>{{ track.comment }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     {% else %}
-    <p>Нет данных для отображения.</p>
-{% endif %}
+        Нет данных для отображения
+    {% endif %}
 {% endblock %}

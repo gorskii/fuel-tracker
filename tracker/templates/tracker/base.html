@@ -1,23 +1,56 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>
         {% block title %}{% endblock %}
     </title>
+    <link rel="stylesheet" href="{% static 'tracker/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'tracker/css/style.css' %}">
 </head>
 <body>
-    <div class="header">
-        {% block header %}
-            <h1>Хэдер</h1>
-        {% endblock %}
-        <hr>
+<!-- HEADER -->
+<header>
+    <div class="modal-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1 col-xs-12 col-sm-12">
+                    {% block header %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
     </div>
-    {% block content %}
-    {% endblock %}
-    <div class="footer">
-        <hr>
-        <small>2017</small>
+</header>
+<!-- HEADER END -->
+<!-- MAIN -->
+<main>
+<div class="container">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1 col-xs-12 col-sm-12" id="table">
+            {% block content %}
+            {% endblock %}
+        </div>
     </div>
+</div>
+</main>
+<!-- MAIN END -->
+<!-- FOOTER -->
+<footer>
+    <div class="modal-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1 col-xs-12 col-sm-12">
+                    <small>Торэко 2017</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- FOOTER END -->
 </body>
 </html>
