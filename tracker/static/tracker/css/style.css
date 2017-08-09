@@ -1,23 +1,31 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
 /**************** HEADER *****************/
+header {
+    height: 150px;
+    position: fixed;
+    width: 100%;
+    z-index: 1;
+}
 
 .modal-header {
     color: white;
     background-color: #1564a9;
-    position: fixed;
+    /*position: fixed;*/
     top: 0;
-    height: 150px;
+    height: 100%;
     width: 100%;
-    z-index: 1;
 }
 
 .modal-header .container {
     position: relative;
     margin-top: 12px;
     margin-bottom: 12px;
-}
-
-.modal-header a {
-    color: white;
 }
 
 .modal-header .btn {
@@ -27,7 +35,6 @@
 
 .modal-header .btn:hover {
     border: solid white 1px;
-    /*color: white;*/
     background-color: #1e73b6;
 }
 
@@ -39,17 +46,24 @@
 
 /***************** MAIN ******************/
 
+main {
+    min-height: 100%;
+    padding-top: 150px;
+    padding-bottom: 50px;
+}
+
 main .container {
-    margin-top: 150px;
-    margin-bottom: 50px;
+    padding: 15px;
 }
 
-.table-responsive {
+main .table-responsive {
     width: 100%;
-    margin: 15px 0px 15px 0px;
+    margin: 0 0 0 0;
 }
 
-/*************** MAIN END ****************/
+.table-responsive .table {
+    margin: 0;
+}
 
 form {
     margin: 16px 0px 16px 0px;
@@ -64,16 +78,30 @@ form .btn:hover {
     color: white;
     background-color: #1e73b6;
 }
+/*************** MAIN END ****************/
 
 /**************** FOOTER ****************/
-.modal-footer {
+footer {
+    position: relative;
+    width: 100%;
+    height: 50px;
+    margin-top: -50px;
+    color: #666;
+    background-color: #333;
+}
+
+footer .modal-footer {
+    position: relative;
+    height: 100%;
     text-align: left;
     color: #666;
     background-color: #333;
-    position: fixed;
-    bottom: 0;
-    height: 50px;
-    width: 100%;
+}
+
+footer .modal-footer .container {
+    position: relative;
+    height: 100%;
+    text-align: left;
 }
 
 /************** FOOTER END **************/
