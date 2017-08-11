@@ -10,8 +10,11 @@
 {% endblock %}
 
 {% block content %}
-    <p>Время: {{ track.time|date:"j.m.Y H:i:s" }}</p>
-    <p>Количество: {{ track.amount.normalize }} кг.</p>
-    <p>Комментарий: {{ track.comment }}</p>
+    <p><b>Время:</b> {{ track.time|date:"j.m.Y H:i:s" }}</p>
+    <p><b>Номер счёта:</b> {{ track.railcar.bill }}</p>
+    <p><b>Тип топлива:</b> {{ track.railcar.fuel }}</p>
+    <p><b>Производитель:</b> {{ track.railcar.fuel_brand }}</p>
+    <p><b>Количество:</b> {{ track.amount.normalize }} кг.</p>
+    <p><b>Комментарий:</b> {{ track.comment }}</p>
 {% endblock %}
 

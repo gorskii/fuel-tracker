@@ -3,12 +3,13 @@ body {
     margin: 0;
     padding: 0;
     height: 100%;
+    min-width: 320px;
 }
 
 /**************** HEADER *****************/
 header {
-    height: 150px;
     position: fixed;
+    height: 150px;
     width: 100%;
     z-index: 1;
 }
@@ -65,6 +66,10 @@ main .table-responsive {
     margin: 0;
 }
 
+.table-row-clickable {
+    cursor: pointer;
+}
+
 form {
     margin: 16px 0px 16px 0px;
 }
@@ -78,6 +83,7 @@ form .btn:hover {
     color: white;
     background-color: #1e73b6;
 }
+
 /*************** MAIN END ****************/
 
 /**************** FOOTER ****************/
@@ -104,4 +110,16 @@ footer .modal-footer .container {
     text-align: left;
 }
 
+footer a {
+    text-decoration: underline;
+    color: #666;
+}
+
+footer a:hover {
+    color: #666;
+}
+
+.link-toreko {
+    font-size: 0.85em;
+}
 /************** FOOTER END **************/

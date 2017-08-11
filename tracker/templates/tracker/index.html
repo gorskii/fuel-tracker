@@ -8,6 +8,7 @@
     </h3>
     <a class="btn" href="{% url 'tracker:new' %}">Принять вагон</a>
 {% endblock %}
+
 {% block content %}
     {% if tracking_list %}
         <div class="table-responsive">
@@ -17,16 +18,22 @@
                     <th>№</th>
                     <th>Время</th>
                     <th>Номер вагона</th>
+                    <th>Номер счета</th>
+                    <th>Топливо</th>
+                    {#<th>Производитель</th>#}
                     <th>Количество</th>
                     <th>Комментарий</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for track in tracking_list %}
-                    <tr>
+                    <tr class="table-row-clickable" data-href="{% url 'tracker:detail' track.id %}">
                         <td><a href="{% url 'tracker:detail' track.id %}">{{ track.id }}</a></td>
                         <td>{{ track.time|date:"d.m.y H:i:s" }}</td>
                         <td>{{ track.railcar }}</td>
+                        <td>{{ track.railcar.bill }}</td>
+                        <td>{{ track.railcar.fuel }}</td>
+                        {#<td>{{ track.railcar.fuel_brand }}</td>#}
                         <td>{{ track.amount.normalize }}</td>
                         <td>{{ track.comment }}</td>
                     </tr>

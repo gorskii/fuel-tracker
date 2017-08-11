@@ -39,3 +39,7 @@ class Tracking(models.Model):  # Отслеживание вагонов
         _datetime = self.time.astimezone(timezone.get_current_timezone())
         return '{}: {}'.format(formats.date_format(_datetime, 'SHORT_DATETIME_FORMAT'),
                                self.railcar)
+
+    # def get_railcar_info(self, track_id):
+    #     track = Tracking.objects.get(pk=track_id)
+    #     railcar_info = track.railcar.
