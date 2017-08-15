@@ -7,9 +7,28 @@
     <a class="btn" href="{% url 'tracker:index' %}">Назад</a>
 {% endblock %}
 {% block content %}
+
     <form action="" method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        <input class="btn btn-default" type="submit" value="Принять"/>
+        {% for field in form %}
+            <div class="row form-group">
+                {{ field.errors }}
+                <div class="col-xs-4 col-sm-offset-1 col-sm-3 col-md-offset-2 col-md-2">
+                    {{ field.label_tag }}
+                </div>
+                <div class="col-xs-8 col-sm-7 col-md-6">
+                    {{ field }}
+                    {% if field.help_text %}
+                        <span class="helptext">{{ field.help_text|safe }}</span>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+
+        <div class="row form-group">
+            <div class="col-xs-offset-8 col-sm-offset-9 col-sm-2 col-md-offset-8">
+                <input class="btn btn-default" type="submit" value="Принять"/>
+            </div>
+        </div>
     </form>
 {% endblock %}

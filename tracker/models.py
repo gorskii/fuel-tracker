@@ -31,9 +31,20 @@ class Railcars(models.Model):  # Вагоны
 
 class Tracking(models.Model):  # Отслеживание вагонов
     time = models.DateTimeField(default=timezone.now)
-    railcar = models.ForeignKey(Railcars, on_delete=models.PROTECT)
-    amount = models.DecimalField(max_digits=10, decimal_places=4)
-    comment = models.TextField(max_length=200, blank=True, default='')
+    railcar = models.ForeignKey(Railcars,
+                                on_delete=models.PROTECT,
+                                verbose_name="Вагон"
+                                )
+    amount = models.DecimalField(max_digits=10,
+                                 decimal_places=4,
+                                 verbose_name="Количество",
+                                 help_text="Введите количество топлива в килограммах."
+                                 )
+    comment = models.TextField(max_length=200,
+                               blank=True,
+                               default='',
+                               verbose_name="Комментарий"
+                               )
 
     def __str__(self):
         _datetime = self.time.astimezone(timezone.get_current_timezone())

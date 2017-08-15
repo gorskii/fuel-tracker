@@ -40,3 +40,4 @@ class TrackCreateView(generic.CreateView):
     fields = ['railcar', 'amount', 'comment']
     success_url = reverse_lazy('tracker:index')
     template_name_suffix = '_new'
+
