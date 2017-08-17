@@ -1,5 +1,7 @@
 from django.urls import reverse_lazy
 from django.views import generic
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView, LogoutView
 
 from .models import Tracking
 
@@ -7,7 +9,7 @@ from .models import Tracking
 # Create your views here.
 
 
-class IndexView(generic.ListView):
+class IndexView(LoginRequiredMixin, generic.ListView):
     template_name = 'tracker/index.html'
     queryset = Tracking.objects.all().order_by('-time')
     context_object_name = 'tracking_list'
@@ -22,7 +24,7 @@ class IndexView(generic.ListView):
 #
 
 
-class DetailView(generic.DetailView):
+class DetailView(LoginRequiredMixin, generic.DetailView):
     model = Tracking
     template_name = 'tracker/detail.html'
     context_object_name = 'track'
@@ -35,9 +37,13 @@ class DetailView(generic.DetailView):
 #     return render(request, 'tracker/detail.html', context)
 
 
-class TrackCreateView(generic.CreateView):
+class TrackCreateView(LoginRequiredMixin, generic.CreateView):
     model = Tracking
     fields = ['railcar', 'amount', 'comment']
     success_url = reverse_lazy('tracker:index')
     template_name_suffix = '_new'
 
+
+class TrackingLoginView(LoginView):
+    redirect_authenticated_user = True
+    redirect_field_name = 'tracker:index'

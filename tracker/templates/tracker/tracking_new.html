@@ -3,8 +3,10 @@
     Прием топлива
 {% endblock %}
 {% block header %}
-    <h3>Прием топлива</h3>
-    <a class="btn" href="{% url 'tracker:index' %}">Назад</a>
+    <span class="header-title">Прием топлива</span>
+    <nav>
+        <a class="btn" href="{% url 'tracker:index' %}">Назад</a>
+    </nav>
 {% endblock %}
 {% block content %}
 
@@ -13,10 +15,10 @@
         {% for field in form %}
             <div class="row form-group">
                 {{ field.errors }}
-                <div class="col-xs-4 col-sm-offset-1 col-sm-3 col-md-offset-2 col-md-2">
+                <div class="col-sm-offset-1 col-sm-3 col-md-offset-2 col-md-2">
                     {{ field.label_tag }}
                 </div>
-                <div class="col-xs-8 col-sm-7 col-md-6">
+                <div class="col-sm-7 col-md-6">
                     {{ field }}
                     {% if field.help_text %}
                         <span class="helptext">{{ field.help_text|safe }}</span>

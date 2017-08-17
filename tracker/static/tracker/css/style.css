@@ -7,26 +7,27 @@ body {
 }
 
 /**************** HEADER *****************/
-header {
+.modal-header {
     position: absolute;
-    height: 150px;
+    height: 130px;
     width: 100%;
     z-index: 1;
-}
-
-.modal-header {
     color: white;
     background-color: #1564a9;
-    /*position: fixed;*/
     top: 0;
-    height: 100%;
-    width: 100%;
 }
 
 .modal-header .container {
     position: relative;
     margin-top: 12px;
     margin-bottom: 12px;
+}
+
+.header-title {
+    display: inline-block;
+    margin-top: 0;
+    font-size: 1.5em;
+    padding-bottom: 10px;
 }
 
 .modal-header .btn {
@@ -39,8 +40,8 @@ header {
     background-color: #1e73b6;
 }
 
-.modal-header h3 {
-    margin-top: 0;
+.btn-logout {
+    float: right;
 }
 
 /************** HEADER END ***************/
@@ -49,7 +50,7 @@ header {
 
 .main {
     min-height: 100%;
-    padding-top: 150px;
+    padding-top: 130px; /* Отступ для шапки */
     padding-bottom: 50px;
 }
 
@@ -73,7 +74,7 @@ main .table-responsive {
 form {
     display: block;
     position: relative;
-    margin: 16px 0px 16px 0px;
+    /*margin: 16px 0px 16px 0px;*/
     width: 100%;
 }
 
@@ -92,8 +93,6 @@ form .btn:hover {
 .form-group {
     display: block;
     position: relative;
-    height: 80px;
-    /*padding-bottom: 10px;*/
 }
 
 #id_railcar, #id_amount {
@@ -112,18 +111,54 @@ label {
 textarea {
     /*position: relative;*/
     width: 100%;
+    /*height: 100%;*/
     height: 8em;
-    margin-bottom: 20px;
+    /*margin-bottom: 20px;*/
+    resize: none;
 }
 
 .helptext {
     display: block;
     font-size: 0.8em;
-    padding-top: 10px;
+    padding-top: 5px;
     text-align: right;
 }
 
 /*************** MAIN END ****************/
+
+/* Авторизация */
+
+#welcome {
+    display: block;
+    text-align: center;
+}
+
+#auth-form {
+    padding: 2em 0;
+}
+
+.form-auth.form-group {
+    display: block;
+    width: 100%;
+}
+
+.form-auth label {
+    display: block;
+    width: auto;
+}
+
+.form-auth input[type="text"],
+.form-auth input[type="password"] {
+    display: block;
+    width: 100%;
+}
+
+.error {
+    display: block;
+    color: red;
+}
+
+/* -------------- */
 
 /**************** FOOTER ****************/
 .footer {
