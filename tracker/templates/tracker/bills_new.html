@@ -1,11 +1,11 @@
 {% extends 'tracker/base.html' %}
 {% block title %}
-    Прием топлива
+    Новый платёж
 {% endblock %}
 {% block header %}
-    <span class="header-title">Прием топлива</span>
+    <span class="header-title">Новый платёж</span>
     <nav>
-        <a class="btn" href="{% url 'tracker:tracking' %}">Назад</a>
+        <a class="btn" href="{% url 'tracker:bills' %}">Платежи</a>
         <a class="btn btn-logout" href="{% url 'tracker:logout' %}">Выход</a>
     </nav>
 {% endblock %}

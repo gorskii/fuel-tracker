@@ -1,50 +1,23 @@
 {% extends 'tracker/base.html' %}
 
 {% block title %}
-    Трекинг
+    Главная
 {% endblock %}
 
 {% block header %}
-    <span class="header-title">Список принятых вагонов</span>
+    <span class="header-title">Главная</span>
+    <span class="user-welcome">Добро пожаловать, {% firstof user.get_short_name user.get_username %}</span>
     <nav>
-        <a class="btn" href="{% url 'tracker:new' %}">Принять вагон</a>
-        <a class="btn btn-logout" href="{% url 'tracker:logout' %}">Выход</a>
+        <a role="button" class="btn btn-logout" href="{% url 'tracker:logout' %}">Выход</a>
     </nav>
 {% endblock %}
 
 {% block content %}
-    {% if tracking_list %}
-        <div class="table-responsive">
-            <table class="table table-striped table-hover">
-                <thead>
-                <tr>
-                    <th>№</th>
-                    <th>Время</th>
-                    <th>Номер вагона</th>
-                    <th>Номер счета</th>
-                    <th>Топливо</th>
-                    {#<th>Производитель</th>#}
-                    <th>Количество</th>
-                    <th>Комментарий</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for track in tracking_list %}
-                    <tr class="table-row-clickable" data-href="{% url 'tracker:detail' track.id %}">
-                        <td><a href="{% url 'tracker:detail' track.id %}">{{ track.id }}</a></td>
-                        <td>{{ track.time|date:"d.m.y H:i:s" }}</td>
-                        <td>{{ track.railcar }}</td>
-                        <td>{{ track.railcar.bill }}</td>
-                        <td>{{ track.railcar.fuel }}</td>
-                        {#<td>{{ track.railcar.fuel_brand }}</td>#}
-                        <td>{{ track.amount.normalize }}</td>
-                        <td>{{ track.comment }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    {% else %}
-        Нет данных для отображения
-    {% endif %}
+    <div class="index-menu">
+        <a role="button" class="btn btn-default index-menu__entry" href="{% url 'tracker:track_new' %}">Принять
+            вагон</a>
+        <a role="button" class="btn btn-default index-menu__entry" href="{% url 'tracker:tracking' %}">Принятые
+            вагоны</a>
+        <a role="button" class="btn btn-default index-menu__entry" href="{% url 'tracker:bills' %}">Платежи</a>
+    </div>
 {% endblock %}

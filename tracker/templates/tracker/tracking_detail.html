@@ -7,7 +7,7 @@
 {% block header %}
     <span class="header-title">Вагон {{ track.railcar }}</span>
     <nav>
-        <a class="btn" href="{% url 'tracker:index' %}">Назад</a>
+        <a class="btn" href="{% url 'tracker:tracking' %}">Назад</a>
         <a class="btn btn-logout" href="{% url 'tracker:logout' %}">Выход</a>
     </nav>
 {% endblock %}
@@ -16,7 +16,7 @@
     <p><b>Время:</b> {{ track.time|date:"j.m.Y H:i:s" }}</p>
     <p><b>Номер счёта:</b> {{ track.railcar.bill }}</p>
     <p><b>Тип топлива:</b> {{ track.railcar.fuel }}</p>
-    <p><b>Производитель:</b> {{ track.railcar.fuel_brand }}</p>
+    <p><b>Поставщик:</b> {{ track.bills.supplier }}</p>
     <p><b>Количество:</b> {{ track.amount.normalize }} кг.</p>
     <p><b>Комментарий:</b> {{ track.comment }}</p>
 {% endblock %}

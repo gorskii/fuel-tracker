@@ -18,6 +18,9 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^', include('tracker.urls')),
-    url(r'^tracker/', include('tracker.urls')),
     url(r'^admin/', admin.site.urls),
 ]
+
+admin.site.site_title = 'Администрирование'
+admin.site.index_title = 'Управление сайтом'
+admin.site.site_header = 'Администрирование'

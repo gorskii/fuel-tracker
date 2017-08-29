@@ -1,0 +1,56 @@
+{% extends 'tracker/base.html' %}
+
+{% block title %}
+    Платежи
+{% endblock %}
+
+{% block header %}
+    <div class="header-title">
+        Платежи
+    </div>
+    <nav>
+        <a role="button" class="btn" href="{% url 'tracker:bills_new' %}">Добавить платеж</a>
+        <a role="button" class="btn btn-logout" href="{% url 'tracker:logout' %}">Выйти</a>
+    </nav>
+{% endblock %}
+
+{% block content %}
+    {% if bills %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Платеж</th>
+                        <th>Вагоны</th>
+                        <th>Сумма</th>
+                        <th>Поставщик</th>
+                        <th>Количество</th>
+                        <th>Дата оплаты</th>
+                        <th>Дата отгрузки</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for bill in bills %}
+                        <tr class="table-row-clickable" data-href="#">
+                            <td>{{ bill.bill }}</td>
+                            <td>
+                                {% for item in bill.railcars_set.all %}
+                                    {{ item.railcar }}<br>
+                                {% endfor %}
+                            </td>
+                            <td>{{ bill.amount.normalize }} р.</td>
+                            <td>{{ bill.supplier }}</td>
+                            <td>
+                                    {{ bill.total.normalize }}
+                            </td>
+                            <td>{{ bill.bill_date|date:"d.m.y" }}</td>
+                            <td>{{ bill.supply_date|date:"d.m.y" }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        Нет данных для отображения.
+    {% endif %}
+{% endblock %}
