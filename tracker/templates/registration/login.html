@@ -20,8 +20,7 @@
         <div id="auth-form" class="row">
             <div class="col-xs-offset-0 col-xs-12 col-sm-offset-3 col-sm-6 col-md-offset-3 col-md-6">
                 {% if form.errors %}
-                    <p class="error">Имя пользователя или пароль неверны. Пожалуйста, попробуйте ещё раз
-                        .</p>
+                    <p class="error">Имя пользователя или пароль неверны. Пожалуйста, попробуйте ещё раз.</p>
                 {% endif %}
                 <form class="form-auth" method="post" action="{% url 'tracker:login' %}">
                     {% csrf_token %}

@@ -11,7 +11,7 @@ urlpatterns = [
     url(r'^tracking/new/$', views.TrackCreateView.as_view(), name='track_new'),
     url(r'^tracking/details/(?P<pk>[0-9]+)/$', views.TrackDetailView.as_view(), name='track_detail'),
     url(r'^bills/$', views.BillsListView.as_view(), name='bills'),
-    url(r'^bills/new/$', views.BillsCreateView.as_view(), name='bills_new'),
+    url(r'^bills/new/$', views.bill_create, name='bills_new'),
     url(r'^login/$', views.MainLoginView.as_view(), name='login'),
     url(r'^logout/$', auth_views.logout_then_login, name='logout'),
 ]

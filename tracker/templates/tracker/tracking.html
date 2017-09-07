@@ -21,7 +21,7 @@
                     <th>№</th>
                     <th>Время</th>
                     <th>Номер вагона</th>
-                    <th>Номер счета</th>
+                    <th>Номер платежа</th>
                     <th>Топливо</th>
                     {#<th>Производитель</th>#}
                     <th>Количество</th>
@@ -37,7 +37,7 @@
                         <td>{{ track.railcar.bill }}</td>
                         <td>{{ track.railcar.fuel }}</td>
                         {#<td>{{ track.railcar.fuel_brand }}</td>#}
-                        <td>{{ track.amount.normalize }}</td>
+                        <td>{{ track.amount.normalize }} кг</td>
                         <td>{{ track.comment }}</td>
                     </tr>
                 {% endfor %}
@@ -47,4 +47,14 @@
     {% else %}
         Нет данных для отображения
     {% endif %}
+{% endblock %}
+
+{% block scripts %}
+    {% load static %}
+    <!-- Bootstrap scripts and jQuery support -->
+    <script src="{% static 'tracker/js/jquery-3.2.1.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'tracker/js/bootstrap.min.js' %}" type="text/javascript"></script>
+    <!-- Custom scripts -->
+    <script src="{% static 'tracker/js/script.js' %}" type="text/javascript"></script>
+    <!-->
 {% endblock %}

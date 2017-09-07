@@ -6,32 +6,71 @@
     <span class="header-title">Новый платёж</span>
     <nav>
         <a class="btn" href="{% url 'tracker:bills' %}">Платежи</a>
-        <a class="btn btn-logout" href="{% url 'tracker:logout' %}">Выход</a>
+        <a class="btn btn-logout" href="{% url 'tracker:logout' %}">Выйти</a>
     </nav>
 {% endblock %}
 {% block content %}
 
     <form action="" method="post">
         {% csrf_token %}
-        {% for field in form %}
+        {% for field in bill_form %}
             <div class="row form-group">
-                {{ field.errors }}
                 <div class="col-sm-offset-1 col-sm-3 col-md-offset-2 col-md-2">
                     {{ field.label_tag }}
                 </div>
                 <div class="col-sm-7 col-md-6">
                     {{ field }}
+                    <div class="error field-error">{{ field.errors }}</div>
                     {% if field.help_text %}
                         <span class="helptext">{{ field.help_text|safe }}</span>
                     {% endif %}
                 </div>
             </div>
         {% endfor %}
-
+        {{ railcars_formset.management_form }}
+        {% for form in railcars_formset %}
+            <div class="form__railcar">
+            <hr/>
+                {% for field in form.visible_fields %}
+                    <div class="row form-group">
+                        <div class="col-sm-offset-1 col-sm-3 col-md-offset-2 col-md-2">
+                            {{ field.label_tag }}
+                        </div>
+                        <div class="col-sm-7 col-md-6">
+                            {{ field }}
+                            <div class="error field-error">{{ field.errors }}</div>
+                            {% if field.help_text %}
+                                <span class="helptext">{{ field.help_text|safe }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
         <div class="row form-group">
             <div class="col-xs-offset-8 col-sm-offset-9 col-sm-2 col-md-offset-8">
                 <input class="btn btn-default" type="submit" value="Принять"/>
             </div>
         </div>
     </form>
+{% endblock %}
+{% block scripts %}
+        {% load static %}
+        <!-- Bootstrap scripts and jQuery support -->
+        <script src="{% static 'tracker/js/jquery-3.2.1.min.js' %}" type="text/javascript"></script>
+        <script src="{% static 'tracker/js/bootstrap.min.js' %}" type="text/javascript"></script>
+        <!-- Custom scripts -->
+        <script src="{% static 'tracker/js/jquery.formset.js' %}" type="text/javascript"></script>
+        <script type="text/javascript">
+            $(function () {
+                $('.form__railcar').formset({
+                    prefix: '{{ railcars_formset.prefix }}',
+                    addText: 'Добавить вагон',
+                    deleteText: 'Удалить',
+                    addCssClass: 'add-row col-sm-offset-1 col-md-offset-2',
+                    deleteCssClass: 'delete-row col-sm-offset-1 col-md-offset-2'
+                });
+            })
+        </script>
+        <!-->
 {% endblock %}

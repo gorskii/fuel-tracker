@@ -3,3 +3,7 @@ $(document).ready(function ($) {
         window.document.location = $(this).data("href");
     });
 });
+
+function addForm(){
+    form = document.getElementsByClassName("form__railcar")
+}

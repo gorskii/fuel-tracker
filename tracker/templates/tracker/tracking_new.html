@@ -15,7 +15,6 @@
         {% csrf_token %}
         {% for field in form %}
             <div class="row form-group">
-                {{ field.errors }}
                 <div class="col-sm-offset-1 col-sm-3 col-md-offset-2 col-md-2">
                     {{ field.label_tag }}
                 </div>
@@ -24,6 +23,7 @@
                     {% if field.help_text %}
                         <span class="helptext">{{ field.help_text|safe }}</span>
                     {% endif %}
+                    <div class="error field-error">{{ field.errors }}</div>
                 </div>
             </div>
         {% endfor %}
