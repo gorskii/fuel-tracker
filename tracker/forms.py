@@ -10,7 +10,7 @@ class BillsModelForm(forms.ModelForm):
         fields = ['bill', 'amount', 'supplier', 'bill_date', 'supply_date']
         widgets = {
             'bill': forms.TextInput(attrs={'class': 'form-control'}),
-            'amount': forms.NumberInput(attrs={'class': 'form-control'}),
+            'amount': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
             'supplier': forms.TextInput(attrs={'class': 'form-control'}),
             'bill_date': forms.DateInput(attrs={'class': 'form-control', 'maxlength': '10'}),
             'supply_date': forms.DateInput(attrs={'class': 'form-control', 'maxlength': '10'}),
@@ -33,7 +33,8 @@ class RailcarsModelForm(forms.ModelForm):
         self.fields['fuel'].widget.attrs = {'class': 'form-control',
                                             'required': True}
         self.fields['volume'].widget.attrs = {'class': 'form-control',
-                                              'required': True}
+                                              'required': True,
+                                              'min': '0'}
 
 
 class TrackingModelForm(forms.ModelForm):
@@ -44,7 +45,8 @@ class TrackingModelForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(TrackingModelForm, self).__init__(*args, **kwargs)
         self.fields['railcar'].widget.attrs = {'class': 'form-control'}
-        self.fields['amount'].widget.attrs = {'class': 'form-control'}
+        self.fields['amount'].widget.attrs = {'class': 'form-control',
+                                              'min': '0'}
         self.fields['comment'].widget.attrs = {'class': 'form-control'}
 
 
