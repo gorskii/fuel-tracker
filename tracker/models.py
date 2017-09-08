@@ -46,6 +46,7 @@ class Railcars(models.Model):  # Вагоны
     fuel = models.ForeignKey(FuelTypes, on_delete=models.PROTECT, verbose_name="тип топлива")
     volume = models.DecimalField(max_digits=10, decimal_places=4, verbose_name="объем",
                                  help_text="Введите количество топлива в килограммах")
+    is_accepted = models.BooleanField(default=False, verbose_name='принят')
 
     class Meta:
         verbose_name = 'вагон'

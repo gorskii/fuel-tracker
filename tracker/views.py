@@ -29,15 +29,19 @@ class TrackDetailView(LoginRequiredMixin, generic.DetailView):
 
 
 class TrackCreateView(LoginRequiredMixin, generic.CreateView):
-    model = Tracking
     form_class = TrackingModelForm
     success_url = reverse_lazy('tracker:tracking')
-    template_name_suffix = '_new'
+    template_name = 'tracker/tracking_new.html'
 
-    def form_valid(self, bill_form):
+    def form_valid(self, form):
         # Делаем отметку пользователя, принявшего вагон
-        bill_form.instance.accepted_by = self.request.user
-        return super(TrackCreateView, self).form_valid(bill_form)
+        form.instance.accepted_by = self.request.user
+        # Делаем пометку, что вагон принят
+        curr_railcar = form.instance.railcar
+        r = Railcars.objects.get(railcar=curr_railcar)
+        r.is_accepted = True
+        r.save()
+        return super(TrackCreateView, self).form_valid(form)
 
 
 class MainLoginView(LoginView):
