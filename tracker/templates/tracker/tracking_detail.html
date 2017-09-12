@@ -35,7 +35,7 @@
             {% endif %}
             {% if fuel_diff|key:track.railcar < 0 %}
                 <span class="track-status alert-success">
-                    Излишки {{ fuel_diff|key:track.railcar|floatformat:-4 }} кг
+                    Излишки {{ fuel_diff|key:track.railcar|abs|floatformat:-4 }} кг
                 </span>
             {% endif %}
         </p>

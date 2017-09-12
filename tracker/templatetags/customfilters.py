@@ -32,3 +32,8 @@ def to_date(value: timezone.timedelta):
     if days == 0:
         td = "{}:{:02}:{:02}".format(hours, minutes, seconds)
     return td
+
+
+@register.filter(name='abs')
+def abs_filter(value):
+    return abs(value)
