@@ -6,7 +6,7 @@ from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required, permission_required
 from django.db.models import Sum
 from django.forms import inlineformset_factory
-from django.utils import timezone, dateformat
+from django.utils import timezone
 
 from .forms import RailcarsModelForm, BillsModelForm, TrackingModelForm, MainLoginForm
 from .models import Tracking, Bills, Railcars
@@ -41,7 +41,7 @@ class TrackDetailView(LoginRequiredMixin, PermissionRequiredMixin, generic.Detai
 class TrackCreateView(LoginRequiredMixin, PermissionRequiredMixin, generic.CreateView):
     permission_required = 'tracker.add_tracking'
     form_class = TrackingModelForm
-    success_url = reverse_lazy('tracker:tracking')
+    success_url = reverse_lazy('tracker:railcars')
     template_name = 'tracker/tracking_new.html'
 
     def form_valid(self, form):
@@ -83,7 +83,6 @@ class MonitoringView(TrackerView):
         context['tracks_stat'] = get_tracks_stat()
         context['railcars_list'] = Railcars.objects.filter(is_accepted=False).order_by('bill__supply_date')
         context['railcars_stat'] = get_railcars_stat()
-        # TODO непринятые вагоны
         return context
 
 

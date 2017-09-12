@@ -7,7 +7,7 @@
 {% block header %}
     <span class="header-title">Вагон {{ track.railcar }}</span>
     <nav>
-        <a class="btn" href="{% url 'tracker:monitoring' %}">Назад</a>
+        <a class="btn" href="{% url 'tracker:tracking' %}">Назад</a>
         <a class="btn btn-logout" href="{% url 'tracker:logout' %}">Выход</a>
     </nav>
 {% endblock %}
