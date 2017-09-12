@@ -14,8 +14,17 @@
 
 {% block content %}
     <div class="index-menu">
-        <a role="button" class="btn btn-default index-menu__entry" href="{% url 'tracker:tracking' %}">Прием вагонов</a>
-        <a role="button" class="btn btn-default index-menu__entry" href="{% url 'tracker:bills' %}">Управление
-            платежами</a>
+        {% if perms.tracker.add_tracking %}
+            <a role="button" class="btn btn-default index-menu__entry"
+               href="{% url 'tracker:tracking' %}">Прием вагонов</a>
+        {% endif %}
+        {% if perms.tracker.view_bills %}
+            <a role="button" class="btn btn-default index-menu__entry"
+               href="{% url 'tracker:bills' %}">Управление платежами</a>
+        {% endif %}
+        {% if perms.tracker.view_tracking and perms.tracker.view_bills %}
+            <a role="button" class="btn btn-default index-menu__entry"
+               href="{% url 'tracker:monitoring' %}">Мониторинг</a>
+        {% endif %}
     </div>
 {% endblock %}

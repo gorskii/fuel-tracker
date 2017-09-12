@@ -10,28 +10,31 @@
     </nav>
 {% endblock %}
 {% block content %}
+    {% if form.railcar|length > 1 %} {# проверка на наличие непринятых вагонов #}
+        <form action="" method="post">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="row form-group">
+                    <div class="col-sm-offset-1 col-sm-3 col-md-offset-2 col-md-2">
+                        {{ field.label_tag }}
+                    </div>
+                    <div class="col-sm-7 col-md-6">
+                        {{ field }}
+                        {% if field.help_text %}
+                            <span class="helptext">{{ field.help_text|safe }}</span>
+                        {% endif %}
+                        <div class="error field-error">{{ field.errors }}</div>
+                    </div>
+                </div>
+            {% endfor %}
 
-    <form action="" method="post">
-        {% csrf_token %}
-        {% for field in form %}
             <div class="row form-group">
-                <div class="col-sm-offset-1 col-sm-3 col-md-offset-2 col-md-2">
-                    {{ field.label_tag }}
-                </div>
-                <div class="col-sm-7 col-md-6">
-                    {{ field }}
-                    {% if field.help_text %}
-                        <span class="helptext">{{ field.help_text|safe }}</span>
-                    {% endif %}
-                    <div class="error field-error">{{ field.errors }}</div>
+                <div class="col-xs-offset-8 col-sm-offset-9 col-sm-2 col-md-offset-8">
+                    <input class="btn btn-default" type="submit" value="Принять"/>
                 </div>
             </div>
-        {% endfor %}
-
-        <div class="row form-group">
-            <div class="col-xs-offset-8 col-sm-offset-9 col-sm-2 col-md-offset-8">
-                <input class="btn btn-default" type="submit" value="Принять"/>
-            </div>
-        </div>
-    </form>
+        </form>
+    {% else %}
+        <p>Нет вагонов, ожидающих приема.</p>
+    {% endif %}
 {% endblock %}

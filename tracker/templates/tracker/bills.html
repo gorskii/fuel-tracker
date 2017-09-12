@@ -1,4 +1,5 @@
 {% extends 'tracker/base.html' %}
+{% load customfilters %}
 
 {% block title %}
     Платежи
@@ -9,7 +10,12 @@
         Платежи
     </div>
     <nav>
-        <a role="button" class="btn" href="{% url 'tracker:bills_new' %}">Добавить платеж</a>
+        {% if not perms.tracker.add_bills or user.is_superuser %}
+            <a role="button" class="btn" href="{% url 'tracker:index' %}">Назад</a>
+        {% endif %}
+        {% if perms.tracker.add_bills %}
+            <a role="button" class="btn" href="{% url 'tracker:bills_new' %}">Добавить платеж</a>
+        {% endif %}
         <a role="button" class="btn btn-logout" href="{% url 'tracker:logout' %}">Выйти</a>
     </nav>
 {% endblock %}
@@ -17,36 +23,49 @@
 {% block content %}
     {% if bills %}
         <div class="table-responsive">
-            <table class="table table-striped table-hover">
+            <table class="table table-striped table-hover table-bordered">
                 <thead>
-                    <tr>
-                        <th>Платеж</th>
-                        <th>Вагоны</th>
-                        <th>Сумма</th>
-                        <th>Поставщик</th>
-                        <th>Количество</th>
-                        <th>Дата оплаты</th>
-                        <th>Дата отгрузки</th>
-                    </tr>
+                <tr>
+                    <th>Платеж</th>
+                    <th>Вагоны</th>
+                    <th>Сумма</th>
+                    <th>Поставщик</th>
+                    <th>Количество</th>
+                    <th>Дата оплаты</th>
+                    <th>Дата отгрузки</th>
+                </tr>
                 </thead>
                 <tbody>
-                    {% for bill in bills %}
-                        <tr class="table-row-clickable" data-href="#">
-                            <td>{{ bill.bill }}</td>
-                            <td>
-                                {% for item in bill.railcars_set.all %}
-                                    {{ item.railcar }}<br>
-                                {% endfor %}
-                            </td>
-                            <td>{{ bill.amount.normalize }} р.</td>
-                            <td>{{ bill.supplier }}</td>
-                            <td>{{ bill.total.normalize }} кг</td>
-                            <td>{{ bill.bill_date|date:"d.m.y" }}</td>
-                            <td>{{ bill.supply_date|date:"d.m.y" }}</td>
-                        </tr>
-                    {% endfor %}
+                {% for bill in bills %}
+                    {# В зависимости от статуса окрашивается строка #}
+                    <tr class="table-row-clickable
+                        {% if bills_stat|key:bill == 3 %}info
+                        {% elif bills_stat|key:bill == 2 %}danger
+                        {% elif bills_stat|key:bill == 1 %}warning
+                        {% elif bills_stat|key:bill == 0 %}success{% endif %}" data-href="#">
+                        <td>{{ bill.bill }}</td>
+                        <td>
+                            {% for item in bill.railcars_set.all %}
+                                {{ item.railcar }}
+                                <br/>
+                            {% endfor %}
+                        </td>
+                        <td>{{ bill.amount.normalize }} р.</td>
+                        <td>{{ bill.supplier }}</td>
+                        <td>{{ bill.total.normalize }} кг</td>
+                        <td>{{ bill.bill_date|date:"d.m.y" }}</td>
+                        <td>{{ bill.supply_date|date:"d.m.y" }}</td>
+                    </tr>
+                {% endfor %}
                 </tbody>
             </table>
+        </div>
+        <div class="table__legend">
+            <h4>Статус платежа</h4>
+            <span class="track-status alert-success">Все вагоны успешно приняты</span>
+            <span class="track-status alert-info">Принята часть вагонов</span>
+            <span class="track-status alert-warning">Задержка одного из вагонов</span>
+            <span class="track-status alert-danger">Недостаток топлива в одном из вагонов</span>
         </div>
     {% else %}
         Нет данных для отображения.

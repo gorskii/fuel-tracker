@@ -1,11 +1,11 @@
 {% extends 'tracker/base.html' %}
 {% block title %}
-    Новый платёж
+    Новый платеж
 {% endblock %}
 {% block header %}
-    <span class="header-title">Новый платёж</span>
+    <span class="header-title">Новый платеж</span>
     <nav>
-        <a class="btn" href="{% url 'tracker:bills' %}">Платежи</a>
+        <a class="btn" href="{% url 'tracker:bills' %}">Назад</a>
         <a class="btn btn-logout" href="{% url 'tracker:logout' %}">Выйти</a>
     </nav>
 {% endblock %}
@@ -49,7 +49,7 @@
         {% endfor %}
         <div class="row form-group">
             <div class="col-xs-offset-8 col-sm-offset-9 col-sm-2 col-md-offset-8">
-                <input class="btn btn-default" type="submit" value="Принять"/>
+                <input class="btn btn-default" type="submit" value="Добавить платеж"/>
             </div>
         </div>
     </form>

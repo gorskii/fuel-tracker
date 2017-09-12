@@ -7,17 +7,33 @@
 {% block header %}
     <span class="header-title">Вагон {{ track.railcar }}</span>
     <nav>
-        <a class="btn" href="{% url 'tracker:tracking' %}">Назад</a>
+        <a class="btn" href="{% url 'tracker:monitoring' %}">Назад</a>
         <a class="btn btn-logout" href="{% url 'tracker:logout' %}">Выход</a>
     </nav>
 {% endblock %}
 
 {% block content %}
-    <p><b>Время:</b> {{ track.time|date:"j.m.Y H:i:s" }}</p>
-    <p><b>Номер счёта:</b> {{ track.railcar.bill }}</p>
-    <p><b>Тип топлива:</b> {{ track.railcar.fuel }}</p>
-    <p><b>Поставщик:</b> {{ track.bills.supplier }}</p>
-    <p><b>Объем:</b> {{ track.amount.normalize }} кг</p>
-    <p><b>Комментарий:</b> {{ track.comment }}</p>
+    <div class="col-sm-6">
+        {% load customfilters %}
+        <p><b>Время:</b> {{ track.time|date:"j.m.Y H:i:s" }}
+            {% with date_diff|key:track.railcar as date %}
+                {% if date.days < 0 %}
+                    <span class="track-status alert-warning">Задержка на {{ date|to_date }}</span>
+                {% else %}
+                    <span class="track-status alert-success">Принят в срок</span>
+                {% endif %}
+            {% endwith %}
+        </p>
+        <p><b>Номер счёта:</b> {{ track.railcar.bill }}</p>
+        <p><b>Тип топлива:</b> {{ track.railcar.fuel }} </p>
+        <p><b>Поставщик:</b> {{ track.railcar.bill.supplier }}</p>
+        <p><b>Объем:</b> {{ track.amount.normalize }} кг
+            {% if fuel_diff|key:track.railcar > 0 %}
+                <span class="track-status alert-danger">
+                    Недостаток {{ fuel_diff|key:track.railcar|floatformat:-4 }} кг
+                </span>
+            {% endif %}</p>
+        <p><b>Комментарий:</b> {{ track.comment }}</p>
+    </div>
 {% endblock %}
 

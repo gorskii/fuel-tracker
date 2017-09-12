@@ -32,6 +32,7 @@ class RailcarsModelForm(forms.ModelForm):
                                                'maxlength': '8'}
         self.fields['fuel'].widget.attrs = {'class': 'form-control',
                                             'required': True}
+        self.fields['fuel'].empty_label = 'Выберите тип топлива'
         self.fields['volume'].widget.attrs = {'class': 'form-control',
                                               'required': True,
                                               'min': '0'}
@@ -46,6 +47,7 @@ class TrackingModelForm(forms.ModelForm):
         super(TrackingModelForm, self).__init__(*args, **kwargs)
         self.fields['railcar'].queryset = Railcars.objects.filter(is_accepted=False)
         self.fields['railcar'].widget.attrs = {'class': 'form-control'}
+        self.fields['railcar'].empty_label = 'Выберите вагон'
         self.fields['amount'].widget.attrs = {'class': 'form-control',
                                               'min': '0'}
         self.fields['comment'].widget.attrs = {'class': 'form-control'}

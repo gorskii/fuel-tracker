@@ -13,19 +13,19 @@
 </head>
 <body>
 <!-- HEADER -->
-<header class="modal-header">
+<div class="header">
     <div class="container">
         <div class="row">
-            <div class="col-md-10 col-md-offset-1 col-xs-12 col-sm-12">
+            <div class="header__content col-md-10 col-md-offset-1 col-xs-12 col-sm-12">
                 {% block header %}
                 {% endblock %}
             </div>
         </div>
     </div>
-</header>
+</div>
 <!-- HEADER END -->
 <!-- MAIN -->
-<main class="main">
+<div class="main">
     <div class="container">
         <div class="row">
             <div class="col-md-10 col-md-offset-1 col-xs-12 col-sm-12">
@@ -34,20 +34,18 @@
             </div>
         </div>
     </div>
-</main>
+</div>
 <!-- MAIN END -->
 <!-- FOOTER -->
-<footer class="footer">
-    <div class="modal-footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-10 col-md-offset-1 col-xs-12 col-sm-12">
-                    <span class="link-toreko"><a href="http://toreko.com/">Торэко {% now 'Y' %}</a></span>
-                </div>
+<div class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="footer__content col-md-10 col-md-offset-1 col-xs-12 col-sm-12">
+                <span class="link-toreko"><a href="http://toreko.com/">Торэко {% now 'Y' %}</a></span>
             </div>
         </div>
     </div>
-</footer>
+</div>
 <!-- FOOTER END -->
 {% block scripts %}
 {% endblock %}

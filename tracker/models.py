@@ -1,8 +1,6 @@
 from django.db import models
 from django.utils import timezone, formats
 from django.contrib.auth.models import User
-from django.http import request
-from django.template.defaultfilters import date
 
 
 def month_limit():
@@ -21,6 +19,9 @@ class Bills(models.Model):  # Список платежей
                                    help_text="Укажите предполагаемую дату поставки")
 
     class Meta:
+        permissions = (
+            ("view_bills", "Пользователь может просматривать счета"),
+        )
         verbose_name = 'платеж'
         verbose_name_plural = 'платежи'
 
@@ -79,6 +80,9 @@ class Tracking(models.Model):  # Отслеживание вагонов
                                     )
 
     class Meta:
+        permissions = (
+            ("view_tracking", "Пользователь может просматривать принятые вагоны"),
+        )
         verbose_name = 'принятый вагон'
         verbose_name_plural = 'принятые вагоны'
 

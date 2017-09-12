@@ -6,22 +6,24 @@ html {
     min-width: 320px;
     overflow-x: hidden;
 }
+
 body {
     margin-bottom: 50px;
 }
 
 /**************** HEADER *****************/
-.modal-header {
+.header {
     height: 115px;
     width: 100%;
     z-index: 1;
     color: white;
-    background-color: #1564a9;
     top: 0;
+    background-color: #1564a9;
 }
 
-.modal-header .container {
+.header__content {
     position: relative;
+    margin-top: 16px;
     /*width: 100%;*/
 }
 
@@ -32,12 +34,12 @@ body {
     padding-bottom: 10px;
 }
 
-.modal-header .btn {
+.header .btn {
     border: solid white 1px;
     color: white;
 }
 
-.modal-header .btn:hover {
+.header .btn:hover {
     border: solid white 1px;
     background-color: #1e73b6;
 }
@@ -61,11 +63,11 @@ body {
     /*padding-bottom: 50px;*/
 }
 
-main .container {
+.main .container {
     padding: 15px;
 }
 
-main .table-responsive {
+.main .table-responsive {
     width: 100%;
     margin: 0 0 0 0;
 }
@@ -76,6 +78,13 @@ main .table-responsive {
 
 .table-row-clickable {
     cursor: pointer;
+}
+
+.table-col-nowrap {
+    max-width: 26ch;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 form {
@@ -129,6 +138,17 @@ textarea {
     font-size: 0.8em;
     padding-top: 5px;
     text-align: right;
+}
+
+.track-status {
+    display: inline-block;
+    padding: 5px 8px;
+    border-radius: 4px;
+    margin: 4px 0;
+}
+
+.table__legend{
+    margin-top: 12px;
 }
 
 /*************** MAIN END ****************/
@@ -203,18 +223,9 @@ textarea {
     background-color: #333;
 }
 
-.footer .modal-footer {
+.footer__content {
+    margin-top: 16px;
     position: relative;
-    height: 100%;
-    text-align: left;
-    color: #666;
-    background-color: #333;
-}
-
-.footer .modal-footer .container {
-    position: relative;
-    height: 100%;
-    text-align: left;
 }
 
 .footer a {
