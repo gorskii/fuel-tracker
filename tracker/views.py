@@ -25,7 +25,7 @@ class TrackerView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListView)
 
 
 class TrackDetailView(LoginRequiredMixin, PermissionRequiredMixin, generic.DetailView):
-    permission_required = 'view_tracking'
+    permission_required = 'tracker.view_tracking'
     model = Tracking
     context_object_name = 'track'
     template_name_suffix = '_detail'
