@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^railcars/new/$', views.TrackCreateView.as_view(), name='track_new'),
     url(r'^bills/$', views.BillsListView.as_view(), name='bills'),
     url(r'^bills/new/$', views.bill_create, name='bills_new'),
+    url(r'^bills/details/(?P<pk>[0-9]+)/$', views.BillsDetailView.as_view(), name='bills_detail'),
     url(r'^tracking/$', views.MonitoringView.as_view(), name='tracking'),
     url(r'^tracking/details/(?P<pk>[0-9]+)/$', views.TrackDetailView.as_view(), name='track_detail'),
     url(r'^login/$', views.MainLoginView.as_view(), name='login'),

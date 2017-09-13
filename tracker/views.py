@@ -65,7 +65,25 @@ class BillsListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListVie
     def get_context_data(self, **kwargs):
         context = super(BillsListView, self).get_context_data(**kwargs)
         context['bills_stat'] = get_bill_stat()
+        context['railcars_stat'] = get_railcars_stat()
         # FIXME Возвращаются два идентичных элемента контекста, bills и object_list. Поправить, если возможоно
+        return context
+
+
+class BillsDetailView(LoginRequiredMixin, PermissionRequiredMixin, generic.DetailView):
+    permission_required = 'tracker.view_bills'
+    model = Bills
+    context_object_name = 'bill'
+    template_name_suffix = '_detail'
+
+    def get_context_data(self, **kwargs):
+        context = super(BillsDetailView, self).get_context_data(**kwargs)
+        railcars = self.object.railcars_set.all().order_by('railcar')
+        context['railcars_list'] = railcars
+        context['fuel_total'] = railcars.aggregate(Sum('volume')).get('volume__sum', 0.00)
+        context['fuel_diff'] = get_fuel_diff(railcars)
+        context['date_diff'] = get_date_diff(railcars)
+        context['railcars_stat'] = get_railcars_stat()
         return context
 
 

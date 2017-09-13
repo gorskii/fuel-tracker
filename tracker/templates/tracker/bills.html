@@ -42,7 +42,8 @@
                         {% if bills_stat|key:bill == 3 %}info
                         {% elif bills_stat|key:bill == 2 %}danger
                         {% elif bills_stat|key:bill == 1 %}warning
-                        {% elif bills_stat|key:bill == 0 %}success{% endif %}" data-href="#">
+                        {% elif bills_stat|key:bill == 0 %}success{% endif %}"
+                        data-href="{% url 'tracker:bills_detail' bill.id %}">
                         <td>{{ bill.bill }}</td>
                         <td>
                             {% for item in bill.railcars_set.all %}
@@ -53,8 +54,15 @@
                         <td>{{ bill.amount.normalize }} р.</td>
                         <td>{{ bill.supplier }}</td>
                         <td>{{ bill.total.normalize }} кг</td>
-                        <td>{{ bill.bill_date|date:"d.m.y" }}</td>
-                        <td>{{ bill.supply_date|date:"d.m.y" }}</td>
+                        <td>{{ bill.bill_date|date:"d.m.Y" }}</td>
+                        <td {% for item in bill.railcars_set.all %}
+                            {% if railcars_stat|key:item == 1 %}
+                                class="fail"
+                            {% endif %}
+                        {% endfor %}
+                        >
+
+                            {{ bill.supply_date|date:"d.m.Y" }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -65,9 +73,20 @@
             <span class="track-status alert-success">Все вагоны успешно приняты</span>
             <span class="track-status alert-info">Принята часть вагонов</span>
             <span class="track-status alert-warning">Задержка одного из вагонов</span>
-            <span class="track-status alert-danger">Недостаток топлива в одном из вагонов</span>
+            <span class="track-status alert-danger">Расхождения в количестве топлива</span>
+{#            <span class="track-status fail">Вагоны не приняты в срок</span>#}
         </div>
     {% else %}
         Нет данных для отображения.
     {% endif %}
+{% endblock %}
+
+{% block scripts %}
+    {% load static %}
+    <!-- Bootstrap scripts and jQuery support -->
+    <script src="{% static 'tracker/js/jquery-3.2.1.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'tracker/js/bootstrap.min.js' %}" type="text/javascript"></script>
+    <!-- Custom scripts -->
+    <script src="{% static 'tracker/js/script.js' %}" type="text/javascript"></script>
+    <!-->
 {% endblock %}

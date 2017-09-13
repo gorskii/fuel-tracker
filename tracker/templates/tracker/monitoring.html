@@ -1,4 +1,5 @@
 {% extends 'tracker/base.html' %}
+{% load customfilters %}
 
 {% block title %}
     Трекинг
@@ -34,8 +35,7 @@
                 </thead>
                 <tbody>
                 {% for track in tracking_list %}
-                    <tr class="table-row-clickable {% load customfilters %}
-                                                   {% if tracks_stat|key:track.railcar == 2 %}danger{% endif %}
+                    <tr class="table-row-clickable {% if tracks_stat|key:track.railcar == 2 %}danger{% endif %}
                                                    {% if tracks_stat|key:track.railcar == 1 %}warning{% endif %}
                                                    {% if tracks_stat|key:track.railcar == 0 %}success{% endif %}"
                         data-href="{% url 'tracker:track_detail' track.id %}">
@@ -77,17 +77,16 @@
                     <th>Номер платежа</th>
                     <th>Поставщик</th>
                     <th>Топливо</th>
-                    <th>Объём</th>
+                    <th>Объем</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for railcar in railcars_list %}
-                    <tr class="{% load customfilters %}
-                               {% if railcars_stat|key:railcar == 2 %}info{% endif %}
+                    <tr class="{% if railcars_stat|key:railcar == 2 %}info{% endif %}
                                {% if railcars_stat|key:railcar == 1 %}danger{% endif %}
                                ">
                         <td>
-                            {{ railcar.bill.supply_date|date:"d.m.y" }}
+                            {{ railcar.bill.supply_date|date:"d.m.Y" }}
                         </td>
                         <td>{{ railcar }}</td>
                         <td>{{ railcar.bill }}</td>
@@ -101,8 +100,8 @@
         </div>
         <div class="table__legend">
             <h5>Статус вагона</h5>
-            <span class="track-status alert-danger">Не принят в срок</span>
             <span class="track-status alert-info">Отгрузка сегодня</span>
+            <span class="track-status alert-danger">Не принят в срок</span>
         </div>
     {% endif %}
 {% endblock %}

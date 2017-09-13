@@ -11,6 +11,14 @@ body {
     margin-bottom: 50px;
 }
 
+.fail {
+    color: white;
+    background-color: #de5962
+}
+.fail:hover {
+    background-color: #de434d
+}
+
 /**************** HEADER *****************/
 .header {
     height: 115px;

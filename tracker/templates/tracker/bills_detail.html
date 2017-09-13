@@ -1,0 +1,96 @@
+{% extends 'tracker/base.html' %}
+{% load customfilters %}
+
+{% block title %}
+    Платеж {{ bill }}
+{% endblock %}
+
+{% block header %}
+    <span class="header-title">Платеж {{ bill }}</span>
+    <nav>
+        <a class="btn" href="{% url 'tracker:bills' %}">Назад</a>
+        <a class="btn btn-logout" href="{% url 'tracker:logout' %}">Выход</a>
+    </nav>
+{% endblock %}
+
+{% block content %}
+    <div class="col-sm-6">
+        <p><b>Номер платежа:</b> {{ bill.bill }}</p>
+        <p><b>Сумма:</b> {{ bill.amount }} р.</p>
+        <p><b>Поставщик:</b> {{ bill.supplier }}</p>
+        <p><b>Объем топлива:</b> {{ fuel_total.normalize }} кг</p>
+        <p><b>Дата оплаты:</b> {{ bill.bill_date|date:"d.m.Y" }}</p>
+        <p><b>Дата отгрузки:</b> {{ bill.supply_date|date:"d.m.Y" }}</p>
+    </div>
+    {% if railcars_list %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                <tr>
+                    <th>Номер вагона</th>
+                    <th>Топливо</th>
+                    <th>Объем</th>
+                    <th>Принято топлива</th>
+                    <th>Время приема</th>
+                    <th>Сотрудник</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for railcar in railcars_list %}
+                    <tr class="{% if railcars_stat|key:railcar == 2 %}info{% endif %}
+                               {% if railcars_stat|key:railcar == 1 %}danger{% endif %}
+                               ">
+                        <td>{{ railcar.railcar }}</td>
+                        <td>{{ railcar.fuel }}</td>
+                        <td>{{ railcar.volume.normalize }} кг</td>
+                        <td>
+                            {% if railcar.is_accepted %}
+                                {% for track in railcar.tracking_set.all %}
+                                    {{ track.amount.normalize }} кг&nbsp;
+                                {% endfor %}
+                                {% with fuel_diff|key:railcar as diff %}
+                                    {% if diff > 0 %}
+                                        <span class="alert-danger">
+                                        -{{ diff|floatformat:-4 }} кг
+                                    </span>
+                                    {% endif %}
+                                    {% if diff < 0 %}
+                                        <span class="alert-success">
+                                        +{{ diff|abs|floatformat:-4 }} кг
+                                    </span>
+                                    {% endif %}
+                                {% endwith %}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if railcar.is_accepted %}
+                                {% for track in railcar.tracking_set.all %}
+                                    {{ track.time|date:"j.m.Y H:i:s" }} &nbsp;
+                                {% endfor %}
+                                {% with date_diff|key:railcar as date %}
+                                    {% if date.days < 0 %}
+                                        <span class="alert-warning">Задержка на {{ date|to_date }}</span>
+                                    {% endif %}
+                                {% endwith %}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if railcar.is_accepted %}
+                                {% for track in railcar.tracking_set.all %}
+                                    {% firstof track.accepted_by.get_full_name track.accepted_by.get_short_name track.accepted_by.get_username %}
+                                {% endfor %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <div class="table__legend">
+            <h5>Статус вагона</h5>
+            <span class="track-status alert-info">Отгрузка сегодня</span>
+            <span class="track-status alert-danger">Не принят в срок</span>
+        </div>
+        </div>
+    {% endif %}
+{% endblock %}
+

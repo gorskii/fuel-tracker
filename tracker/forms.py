@@ -45,7 +45,7 @@ class TrackingModelForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(TrackingModelForm, self).__init__(*args, **kwargs)
-        self.fields['railcar'].queryset = Railcars.objects.filter(is_accepted=False)
+        self.fields['railcar'].queryset = Railcars.objects.filter(is_accepted=False).order_by('railcar')
         self.fields['railcar'].widget.attrs = {'class': 'form-control'}
         self.fields['railcar'].empty_label = 'Выберите вагон'
         self.fields['amount'].widget.attrs = {'class': 'form-control',
