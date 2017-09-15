@@ -133,3 +133,4 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Authorization settings
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
+SESSION_COOKIE_AGE = 86400
