@@ -48,8 +48,8 @@ class TrackCreateView(LoginRequiredMixin, PermissionRequiredMixin, generic.Creat
         # Делаем отметку пользователя, принявшего вагон
         form.instance.accepted_by = self.request.user
         # Делаем пометку, что вагон принят
-        curr_railcar = form.instance.railcar
-        r = Railcars.objects.get(railcar=curr_railcar)
+        curr_railcar = form.instance.railcar.id
+        r = Railcars.objects.get(pk=curr_railcar)
         r.is_accepted = True
         r.save()
         return super(TrackCreateView, self).form_valid(form)
