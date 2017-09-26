@@ -29,7 +29,7 @@ DEBUG = False
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    'fuel-tracker.herokuapp.com',
+    '188.225.82.6',
 ]
 
 # Application definition
@@ -46,7 +46,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # Serve static files for Heroku
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -81,10 +80,10 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'd1i59j1046tk3c',
-        'USER': 'puvmrqxfansfnw',
-        'PASSWORD': '61e50c87e9c8a9d9f511fcc8a190398c4e21631127860fc4dfb97cbbfe2fd607',
-        'HOST': 'ec2-176-34-110-252.eu-west-1.compute.amazonaws.com',
+        'NAME': 'tracker',
+        'USER': 'tracker',
+        'PASSWORD': 'Toreko_0717',
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }
@@ -122,13 +121,10 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, '../pub/static/')
+
 
 STATIC_URL = '/static/'
-
-# Simplified static file serving.
-# https://warehouse.python.org/project/whitenoise/
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Authorization settings
 LOGIN_URL = '/login/'
