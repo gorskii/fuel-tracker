@@ -30,6 +30,7 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     '188.225.82.6',
+    'tracker.toreko.webtm.ru'
 ]
 
 # Application definition
