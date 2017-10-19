@@ -38,16 +38,37 @@ class RailcarsModelForm(forms.ModelForm):
                                               'min': '0'}
 
 
+class RailcarAddForm(forms.ModelForm):
+    railcar = forms.ModelChoiceField(label='Вагон', queryset=Railcars.objects.filter(bill=None, is_accepted=True))
+    railcar.widget = forms.Select(attrs={'class': 'form-control'})
+
+    class Meta:
+        model = Railcars
+        fields = ('railcar',)
+    # queryset = Railcars.objects.filter(bill=None)
+
+    # class Media:
+    #     js = ('jquery.formset.js',)
+
+    # def __init__(self, *args, **kwargs):
+    #     super(RailcarsModelForm, self).__init__(*args, **kwargs)
+    #     self.fields['railcar'].queryset = Railcars.objects.filter(bill=None)
+        # self.fields['railcar'].widget.attrs = {'class': 'form-control',
+                                               # 'required': True,
+                                               # }
+
+
 class TrackingModelForm(forms.ModelForm):
     class Meta:
         model = Tracking
-        fields = ['railcar', 'amount', 'comment']
+        # fields = ['railcar', 'amount', 'comment']
+        fields = ['amount', 'comment']
 
     def __init__(self, *args, **kwargs):
         super(TrackingModelForm, self).__init__(*args, **kwargs)
-        self.fields['railcar'].queryset = Railcars.objects.filter(is_accepted=False).order_by('railcar')
-        self.fields['railcar'].widget.attrs = {'class': 'form-control'}
-        self.fields['railcar'].empty_label = 'Выберите вагон'
+        # self.fields['railcar'].queryset = Railcars.objects.filter(is_accepted=False).order_by('railcar')
+        # self.fields['railcar'].widget.attrs = {'class': 'form-control'}
+        # self.fields['railcar'].empty_label = 'Выберите вагон'
         self.fields['amount'].widget.attrs = {'class': 'form-control',
                                               'min': '0'}
         self.fields['comment'].widget.attrs = {'class': 'form-control'}

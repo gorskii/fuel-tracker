@@ -10,10 +10,25 @@
     </nav>
 {% endblock %}
 {% block content %}
-    {% if form.railcar|length > 1 %} {# проверка на наличие непринятых вагонов #}
+{#    {% if form.railcar|length > 1 %} {# проверка на наличие непринятых вагонов #}
         <form action="" method="post">
             {% csrf_token %}
-            {% for field in form %}
+            {% for field in railcar %}
+                <div class="row form-group">
+                    <div class="col-sm-offset-1 col-sm-3 col-md-offset-2 col-md-2">
+                        {{ field.label_tag }}
+                    </div>
+                    <div class="col-sm-7 col-md-6">
+                        {{ field }}
+                        {% if field.help_text %}
+                            <span class="helptext">{{ field.help_text|safe }}</span>
+                        {% endif %}
+                        <div class="error field-error">{{ field.errors }}</div>
+                    </div>
+                </div>
+            {% endfor %}
+
+            {% for field in track %}
                 <div class="row form-group">
                     <div class="col-sm-offset-1 col-sm-3 col-md-offset-2 col-md-2">
                         {{ field.label_tag }}
@@ -34,7 +49,7 @@
                 </div>
             </div>
         </form>
-    {% else %}
-        <p>Нет вагонов, ожидающих приема.</p>
-    {% endif %}
+{#    {% else %}#}
+{#        <p>Нет вагонов, ожидающих приема.</p>#}
+{#    {% endif %}#}
 {% endblock %}

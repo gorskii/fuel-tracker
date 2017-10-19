@@ -24,7 +24,7 @@
                 {% endif %}
             {% endwith %}
         </p>
-        <p><b>Номер счёта:</b> {{ track.railcar.bill }}</p>
+        <p><b>Номер сделки:</b> {% if track.railcar.bill%}{{ track.railcar.bill }}{% endif %}</p>
         <p><b>Тип топлива:</b> {{ track.railcar.fuel }} </p>
         <p><b>Поставщик:</b> {{ track.railcar.bill.supplier }}</p>
         <p><b>Объем:</b> {{ track.amount.normalize }} кг

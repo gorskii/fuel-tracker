@@ -31,6 +31,7 @@
                     {#<th>Производитель</th>#}
                     <th>Количество</th>
                     <th>Комментарий</th>
+                    <th>Отпущен</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -44,6 +45,14 @@
                         {#<td>{{ track.railcar.fuel_brand }}</td>#}
                         <td>{{ track.amount.normalize }} кг</td>
                         <td>{{ track.comment }}</td>
+                        <td>
+                            {% if not track.railcar.is_released %}
+                                <a class="btn btn__release"
+                                   href="{% url 'tracker:railcar_release' track.id %}">Отпустить</a>
+                            {% else %}
+                                {{ track.release_time|date:"H:i" }}
+                            {% endif %}
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>

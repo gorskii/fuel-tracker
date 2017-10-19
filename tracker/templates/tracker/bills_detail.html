@@ -2,11 +2,11 @@
 {% load customfilters %}
 
 {% block title %}
-    Платеж {{ bill }}
+    Сделка {{ bill }}
 {% endblock %}
 
 {% block header %}
-    <span class="header-title">Платеж {{ bill }}</span>
+    <span class="header-title">Сделка {{ bill }}</span>
     <nav>
         <a class="btn" href="{% url 'tracker:bills' %}">Назад</a>
         <a class="btn btn-logout" href="{% url 'tracker:logout' %}">Выход</a>
@@ -14,13 +14,48 @@
 {% endblock %}
 
 {% block content %}
-    <div class="col-sm-6">
-        <p><b>Номер платежа:</b> {{ bill.bill }}</p>
-        <p><b>Сумма:</b> {{ bill.amount }} р.</p>
-        <p><b>Поставщик:</b> {{ bill.supplier }}</p>
-        <p><b>Объем топлива:</b> {{ fuel_total.normalize }} кг</p>
-        <p><b>Дата оплаты:</b> {{ bill.bill_date|date:"d.m.Y" }}</p>
-        <p><b>Дата отгрузки:</b> {{ bill.supply_date|date:"d.m.Y" }}</p>
+    <div class="row">
+        <div class="col-sm-6">
+            <p><b>Номер сделки:</b> {{ bill.bill }}</p>
+            <p><b>Сумма:</b> {{ bill.amount }} р.</p>
+            <p><b>Поставщик:</b> {{ bill.supplier }}</p>
+            <p><b>Объем топлива:</b> {{ fuel_total.normalize }} кг</p>
+            <p><b>Дата оплаты:</b> {{ bill.bill_date|date:"d.m.Y" }}</p>
+            <p><b>Дата отгрузки:</b> {{ bill.supply_date|date:"d.m.Y" }}</p>
+        </div>
+        <form class="form-block col-sm-6" action="" method="post">
+            <div class="form_title">
+                <hr/>
+                <p><b>Добавить вагон к сделке:</b></p>
+            </div>
+            {% csrf_token %}
+            {#        {{ railcars_formset.management_form }}#}
+            {#        {% for form in railcars_formset %}#}
+            {#            <div class="form__railcar">#}
+            {#                <hr/>#}
+            {% for field in railcars_form %}
+                <div class="row form-group">
+                    <div class="col-xs-3">
+                        {{ field.label_tag }}
+                    </div>
+                    <div class="col-xs-9">
+                        {{ field }}
+                        <div class="error field-error">{{ field.errors }}</div>
+                        {% if field.help_text %}
+                            <span class="helptext">{{ field.help_text|safe }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+            {#            </div>#}
+            {#        {% endfor %}#}
+            <div class="row form-group">
+                <div class="col-xs-offset-8 col-xs-4">
+                    <input class="btn btn-default" type="submit" value="Добавить"/>
+                </div>
+            </div>
+            <hr/>
+        </form>
     </div>
     {% if railcars_list %}
         <div class="table-responsive">
@@ -86,11 +121,10 @@
                 </tbody>
             </table>
             <div class="table__legend">
-            <h5>Статус вагона</h5>
-            <span class="track-status alert-info">Отгрузка сегодня</span>
-            <span class="track-status alert-danger">Не принят в срок</span>
-        </div>
+                <h5>Статус вагона</h5>
+                <span class="track-status alert-info">Отгрузка сегодня</span>
+                <span class="track-status alert-danger">Не принят в срок</span>
+            </div>
         </div>
     {% endif %}
 {% endblock %}
-

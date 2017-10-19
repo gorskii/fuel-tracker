@@ -1,14 +1,14 @@
 from django.urls import reverse_lazy
-from django.shortcuts import HttpResponseRedirect, render
+from django.shortcuts import HttpResponseRedirect, render, get_object_or_404
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required, permission_required
 from django.db.models import Sum
-from django.forms import inlineformset_factory
+from django.forms import inlineformset_factory, modelformset_factory
 from django.utils import timezone
 
-from .forms import RailcarsModelForm, BillsModelForm, TrackingModelForm, MainLoginForm
+from .forms import RailcarsModelForm, RailcarAddForm, BillsModelForm, TrackingModelForm, MainLoginForm
 from .models import Tracking, Bills, Railcars
 
 
@@ -38,21 +38,30 @@ class TrackDetailView(LoginRequiredMixin, PermissionRequiredMixin, generic.Detai
         return context
 
 
-class TrackCreateView(LoginRequiredMixin, PermissionRequiredMixin, generic.CreateView):
-    permission_required = 'tracker.add_tracking'
-    form_class = TrackingModelForm
-    success_url = reverse_lazy('tracker:railcars')
-    template_name = 'tracker/tracking_new.html'
-
-    def form_valid(self, form):
-        # Делаем отметку пользователя, принявшего вагон
-        form.instance.accepted_by = self.request.user
-        # Делаем пометку, что вагон принят
-        curr_railcar = form.instance.railcar.id
-        r = Railcars.objects.get(pk=curr_railcar)
-        r.is_accepted = True
-        r.save()
-        return super(TrackCreateView, self).form_valid(form)
+# class TrackCreateView(LoginRequiredMixin, PermissionRequiredMixin, generic.CreateView):
+#     permission_required = 'tracker.add_tracking'
+#     form_class = TrackingModelForm
+#     success_url = reverse_lazy('tracker:railcars')
+#     template_name = 'tracker/tracking_new.html'
+#     context_object_name = 'form'
+#
+#     def get_context_data(self, **kwargs):
+#         context = super(TrackCreateView, self).get_context_data(**kwargs)
+#         railcar_form = RailcarsModelForm()
+#         context['railcar'] = railcar_form
+#         return context
+#
+#     def form_valid(self, form):
+#         r = RailcarsModelForm(self.request.POST)
+#         # r.instance.railcar = self.request.POST['railcar']
+#         # r.instance.fuel = self.request.POST['fuel']
+#         # r.instance.volume = self.request.POST['volume']
+#         # Делаем отметку пользователя, принявшего вагон
+#         form.instance.accepted_by = self.request.user
+#         # Делаем пометку, что вагон принят
+#         r.instance.is_accepted = True
+#         r.instance.save()
+#         return super(TrackCreateView, self).form_valid(form)
 
 
 class BillsListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListView):  # Вью для вывода списка платежей
@@ -71,6 +80,8 @@ class BillsListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListVie
 
 
 class BillsDetailView(LoginRequiredMixin, PermissionRequiredMixin, generic.DetailView):
+    """ This class based view replaced by bill_detail view below """
+
     permission_required = 'tracker.view_bills'
     model = Bills
     context_object_name = 'bill'
@@ -84,7 +95,32 @@ class BillsDetailView(LoginRequiredMixin, PermissionRequiredMixin, generic.Detai
         context['fuel_diff'] = get_fuel_diff(railcars)
         context['date_diff'] = get_date_diff(railcars)
         context['railcars_stat'] = get_railcars_stat()
+        context['railcars_form'] = RailcarAddForm()
+
         return context
+
+
+@login_required
+@permission_required('tracker.add_bills')
+def bill_detail(request, pk):
+    context = {}
+    bill = get_object_or_404(Bills, pk=pk)
+    railcars = bill.railcars_set.all().order_by('railcar')
+    context['bill'] = bill
+    context['railcars_list'] = railcars
+    context['fuel_total'] = railcars.aggregate(Sum('volume')).get('volume__sum', 0.00)
+    context['fuel_diff'] = get_fuel_diff(railcars)
+    context['date_diff'] = get_date_diff(railcars)
+    context['railcars_stat'] = get_railcars_stat()
+    if request.method == 'POST':
+        railcar = get_object_or_404(Railcars, pk=request.POST['railcar'])
+        if railcar.bill is None:
+            railcar.bill = bill
+            railcar.save(update_fields=['bill'])
+        return HttpResponseRedirect(reverse_lazy('tracker:bills_detail', kwargs={'pk': pk}))
+    else:
+        context['railcars_form'] = RailcarAddForm()
+    return render(request, template_name='tracker/bills_detail.html', context=context)
 
 
 class MonitoringView(TrackerView):
@@ -115,32 +151,60 @@ class IndexView(LoginRequiredMixin, generic.TemplateView):
 
 
 @login_required
+@permission_required('tracker.add_tracking')
+def track_create(request):
+    if request.method == 'POST':
+        railcar_form = RailcarsModelForm(request.POST)
+        if railcar_form.is_valid():
+            created_railcar = railcar_form.save(commit=False)
+            tracking_form = TrackingModelForm(request.POST)
+            if tracking_form.is_valid():
+                created_railcar.is_accepted = True
+                created_railcar.save()
+                tracking_form.instance.railcar = created_railcar
+                tracking_form.instance.accepted_by = request.user
+                tracking_form.save()
+                return HttpResponseRedirect(reverse_lazy('tracker:railcars'))
+        else:
+            tracking_form = TrackingModelForm(request.POST)
+    else:
+        railcar_form = RailcarsModelForm()
+        tracking_form = TrackingModelForm()
+    return render(request, 'tracker/tracking_new.html',
+                  {'railcar': railcar_form,
+                   'track': tracking_form})
+
+
+@login_required
 @permission_required('tracker.add_bills')
 def bill_create(request):
-    railcar_formset = inlineformset_factory(Bills, Railcars,
-                                            form=RailcarsModelForm,
-                                            extra=0,
-                                            min_num=1,
-                                            validate_min=True,
-                                            can_delete=False)
+    # railcar_formset = inlineformset_factory(Bills, Railcars,
+    #                                         form=RailcarsModelForm,
+    #                                         extra=0,
+    #                                         min_num=1,
+    #                                         validate_min=True,
+    #                                         can_delete=False)
     if request.method == 'POST':
         bill_form = BillsModelForm(request.POST)
         if bill_form.is_valid():
-            created_bill = bill_form.save(commit=False)
-            formset = railcar_formset(request.POST, instance=created_bill)
-            if formset.is_valid():
-                created_bill.save()
-                formset.save()
-                return HttpResponseRedirect(reverse_lazy('tracker:bills'))
-        else:
-            formset = railcar_formset(request.POST)
+            bill_form.save()
+            return HttpResponseRedirect(reverse_lazy('tracker:bills'))
+            #     created_bill = bill_form.save(commit=False)
+            #     formset = railcar_formset(request.POST, instance=created_bill)
+            #     if formset.is_valid():
+            #         created_bill.save()
+            #         formset.save()
+            #         return HttpResponseRedirect(reverse_lazy('tracker:bills'))
+            # else:
+            #     formset = railcar_formset(request.POST)
     else:
         bill_form = BillsModelForm()
-        bill = Bills()
-        formset = railcar_formset(instance=bill)
-    return render(request, 'tracker/bills_new.html',
-                  {'bill_form': bill_form,
-                   'railcars_formset': formset})
+        # bill = Bills()
+        # formset = railcar_formset(instance=bill)
+    # return render(request, 'tracker/bills_new.html',
+    #               {'bill_form': bill_form,
+    #                'railcars_formset': formset})
+    return render(request, 'tracker/bills_new.html', {'bill_form': bill_form})
 
 
 def get_fuel_diff(railcars):
@@ -169,11 +233,14 @@ def get_date_diff(railcars):
     for railcar in railcars:
         if Tracking.objects.filter(railcar=railcar).exists():
             track = Tracking.objects.get(railcar=railcar)
-            d = railcar.bill.supply_date
-            # За точку отсчёта принимаем 15:00 даты отгрузки
-            dt = timezone.make_aware(timezone.datetime(d.year, d.month, d.day)) + timezone.timedelta(hours=15)
-            td = dt - track.time  # type: timezone.timedelta
-            diff[railcar] = td
+            if railcar.bill:
+                d = railcar.bill.supply_date
+                # За точку отсчёта принимаем 15:00 даты отгрузки
+                dt = timezone.make_aware(timezone.datetime(d.year, d.month, d.day)) + timezone.timedelta(hours=15)
+                td = dt - track.time  # type: timezone.timedelta
+                diff[railcar] = td
+            # else:
+            #     diff[railcar] = None  # None если нет привязки к счёту
     return diff
 
 
@@ -264,3 +331,14 @@ def get_railcars_stat():
         else:
             railcars_stat[railcar] = 0  # время ещё не пришло
     return railcars_stat
+
+
+def railcar_release(request, pk):
+    if request.method == 'GET':
+        track = get_object_or_404(Tracking, pk=pk)
+        railcar = track.railcar
+        railcar.is_released = True
+        railcar.save(update_fields=('is_released',))
+        track.release_time = timezone.now()
+        track.save(update_fields=('release_time',))
+    return HttpResponseRedirect(reverse_lazy('tracker:railcars'))

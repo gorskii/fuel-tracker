@@ -12,9 +12,10 @@ body {
 }
 
 .fail {
-    color: white;
-    background-color: #de5962
+    color: red;
+    /*background-color: #de5962*/
 }
+
 .fail:hover {
     background-color: #de434d
 }
@@ -102,16 +103,23 @@ form {
     width: 100%;
 }
 
-form .btn {
+form .btn,
+.btn__release {
     float: right;
     color: white;
     background-color: #1564a9;
-    border-style: none;
+    border: solid #1564a9 1px;
 }
 
-form .btn:hover {
+form .btn:hover,
+.btn__release:hover {
     color: white;
     background-color: #1e73b6;
+    border: solid #1e73b6 1px;
+}
+
+td .btn__release {
+    float: left;
 }
 
 .form-group {
@@ -155,8 +163,12 @@ textarea {
     margin: 4px 0;
 }
 
-.table__legend{
+.table__legend {
     margin-top: 12px;
+}
+
+.form-block hr{
+    margin-top: 10px;
 }
 
 /*************** MAIN END ****************/

@@ -8,7 +8,9 @@ register = template.Library()
 @register.filter
 def key(d, k):
     """ Get dictionary value by key """
-    return d[k]
+    if k in d:
+        return d[k]
+    return None
 
 
 @register.filter

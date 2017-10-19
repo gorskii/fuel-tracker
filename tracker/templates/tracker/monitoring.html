@@ -25,11 +25,12 @@
                     <th>№</th>
                     <th>Время</th>
                     <th>Номер вагона</th>
-                    <th>Номер платежа</th>
+                    <th>Номер сделки</th>
                     <th>Топливо</th>
                     {#<th>Производитель</th>#}
                     <th>Количество</th>
                     <th>Комментарий</th>
+                    <th>Отпущен</th>
                     <th>Сотрудник</th>
                 </tr>
                 </thead>
@@ -42,11 +43,18 @@
                         <td><a href="{% url 'tracker:track_detail' track.id %}">{{ track.id }}</a></td>
                         <td>{{ track.time|date:"d.m.y H:i:s" }}</td>
                         <td>{{ track.railcar }}</td>
-                        <td>{{ track.railcar.bill }}</td>
+                        <td>{% if track.railcar.bill %}{{ track.railcar.bill }}{% endif %}</td>
                         <td>{{ track.railcar.fuel }}</td>
                         {#<td>{{ track.railcar.fuel_brand }}</td>#}
                         <td>{{ track.amount.normalize }} кг</td>
                         <td class="table-col-nowrap">{{ track.comment }}</td>
+                        <td>
+                            {% if not track.railcar.is_released %}
+                                на базе
+                            {% else %}
+                                {{ track.release_time|date:"H:i" }}
+                            {% endif %}
+                        </td>
                         <td>
                             {% firstof track.accepted_by.get_full_name track.accepted_by.get_short_name track.accepted_by.get_username %}
                         </td>
@@ -74,7 +82,7 @@
                 <tr>
                     <th>Дата отгрузки</th>
                     <th>Номер вагона</th>
-                    <th>Номер платежа</th>
+                    <th>Номер сделки</th>
                     <th>Поставщик</th>
                     <th>Топливо</th>
                     <th>Объем</th>
