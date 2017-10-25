@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 def month_limit():
     """
-    Вычисляет 30 дней от текущей даты, чтобы подставить в supply_date по умолчанию.
+    Вычисляет 30 дней от текущей даты, чтобы подставить в payment_date по умолчанию.
     """
     return timezone.localdate() + timezone.timedelta(days=30)
 
@@ -14,16 +14,17 @@ class Bills(models.Model):  # Список платежей
     bill = models.CharField(max_length=32, verbose_name="Номер сделки", unique=True)
     amount = models.DecimalField(max_digits=14, decimal_places=2, verbose_name="Сумма")
     supplier = models.CharField(max_length=32, verbose_name="Поставщик")
+    volume = models.IntegerField(default=60, verbose_name="Количество", help_text="Введите количество в тоннах")
     bill_date = models.DateField(default=timezone.localdate, verbose_name="Дата сделки")
-    supply_date = models.DateField(default=month_limit, verbose_name="Дата поставки",
-                                   help_text="Укажите предполагаемую дату поставки")
+    payment_date = models.DateField(null=True, blank=True, verbose_name="Дата оплаты",
+                                    help_text="Оставьте поле пустым, если слелка ещё не оплачена")
 
     class Meta:
         permissions = (
-            ("view_bills", "Пользователь может просматривать счета"),
+            ("view_bills", "Пользователь может просматривать сделки"),
         )
-        verbose_name = 'платеж'
-        verbose_name_plural = 'платежи'
+        verbose_name = 'сделка'
+        verbose_name_plural = 'сделки'
 
     def __str__(self):
         return self.bill
@@ -80,7 +81,7 @@ class Tracking(models.Model):  # Отслеживание вагонов
                                     on_delete=models.PROTECT,
                                     verbose_name="сотрудник"
                                     )
-    release_time = models.DateTimeField(null=True, verbose_name='отпущен в      ')
+    release_time = models.DateTimeField(null=True, verbose_name='отпущен в ')
 
     class Meta:
         permissions = (

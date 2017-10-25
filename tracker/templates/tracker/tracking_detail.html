@@ -15,16 +15,8 @@
 {% block content %}
     <div class="col-sm-6">
         {% load customfilters %}
-        <p><b>Время:</b> {{ track.time|date:"j.m.Y H:i:s" }}
-            {% with date_diff|key:track.railcar as date %}
-                {% if date.days < 0 %}
-                    <span class="track-status alert-warning">Задержка на {{ date|to_date }}</span>
-                {% else %}
-                    <span class="track-status alert-success">Принят в срок</span>
-                {% endif %}
-            {% endwith %}
-        </p>
-        <p><b>Номер сделки:</b> {% if track.railcar.bill%}{{ track.railcar.bill }}{% endif %}</p>
+        <p><b>Время:</b> {{ track.time|date:"j.m.Y H:i:s" }}</p>
+        <p><b>Номер сделки:</b> {% if track.railcar.bill %}{{ track.railcar.bill }}{% endif %}</p>
         <p><b>Тип топлива:</b> {{ track.railcar.fuel }} </p>
         <p><b>Поставщик:</b> {{ track.railcar.bill.supplier }}</p>
         <p><b>Объем:</b> {{ track.amount.normalize }} кг
@@ -42,6 +34,15 @@
             {% endwith %}
         </p>
         <p><b>Комментарий:</b> {{ track.comment }}</p>
+        <p><b>Отпущен:</b>
+            {% if not track.railcar.is_released %}
+                <span class="alert-danger">на базе</span>
+            {% else %}
+                {{ track.release_time|date:"H:i" }}
+            {% endif %}</p>
+        <p>
+            <b>Сотрудник:</b> {% firstof track.accepted_by.get_full_name track.accepted_by.get_short_name track.accepted_by.get_username %}
+        </p>
     </div>
 {% endblock %}
 

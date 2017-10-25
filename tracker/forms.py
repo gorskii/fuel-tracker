@@ -7,13 +7,14 @@ from .models import Bills, Railcars, Tracking
 class BillsModelForm(forms.ModelForm):
     class Meta:
         model = Bills
-        fields = ['bill', 'amount', 'supplier', 'bill_date', 'supply_date']
+        fields = ['bill', 'amount', 'supplier', 'volume', 'bill_date', "payment_date"]
         widgets = {
             'bill': forms.TextInput(attrs={'class': 'form-control'}),
             'amount': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
             'supplier': forms.TextInput(attrs={'class': 'form-control'}),
+            'volume': forms.NumberInput(attrs={'class': 'form-control', 'min': '1', 'max': 600}),
             'bill_date': forms.DateInput(attrs={'class': 'form-control', 'maxlength': '10'}),
-            'supply_date': forms.DateInput(attrs={'class': 'form-control', 'maxlength': '10'}),
+            "payment_date": forms.DateInput(attrs={'class': 'form-control', 'maxlength': '10'}),
         }
 
 
@@ -35,7 +36,8 @@ class RailcarsModelForm(forms.ModelForm):
         self.fields['fuel'].empty_label = 'Выберите тип топлива'
         self.fields['volume'].widget.attrs = {'class': 'form-control',
                                               'required': True,
-                                              'min': '0'}
+                                              'min': '1',
+                                              'max': '60000'}
 
 
 class RailcarAddForm(forms.ModelForm):
@@ -70,7 +72,8 @@ class TrackingModelForm(forms.ModelForm):
         # self.fields['railcar'].widget.attrs = {'class': 'form-control'}
         # self.fields['railcar'].empty_label = 'Выберите вагон'
         self.fields['amount'].widget.attrs = {'class': 'form-control',
-                                              'min': '0'}
+                                              'min': '1',
+                                              'max': '60000'}
         self.fields['comment'].widget.attrs = {'class': 'form-control'}
 
 

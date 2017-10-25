@@ -1,0 +1,36 @@
+{% extends 'tracker/base.html' %}
+{% block title %}
+    Редактирование сделки
+{% endblock %}
+{% block header %}
+    <span class="header-title">Редактирование сделки</span>
+    <nav>
+        <a class="btn" href="{% url 'tracker:bills_detail' bill.id %}">Назад</a>
+        <a class="btn btn-logout" href="{% url 'tracker:logout' %}">Выйти</a>
+    </nav>
+{% endblock %}
+{% block content %}
+
+    <form action="" method="post">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="row form-group">
+                <div class="col-sm-offset-1 col-sm-3 col-md-offset-2 col-md-2">
+                    {{ field.label_tag }}
+                </div>
+                <div class="col-sm-7 col-md-6">
+                    {{ field }}
+                    <div class="error field-error">{{ field.errors }}</div>
+                    {% if field.help_text %}
+                        <span class="helptext">{{ field.help_text|safe }}</span>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+        <div class="row form-group">
+            <div class="col-xs-offset-8 col-sm-offset-9 col-sm-2 col-md-offset-8">
+                <input class="btn btn-default" type="submit" value="Сохранить"/>
+            </div>
+        </div>
+    </form>
+{% endblock %}

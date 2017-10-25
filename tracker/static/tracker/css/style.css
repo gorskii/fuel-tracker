@@ -11,13 +11,48 @@ body {
     margin-bottom: 50px;
 }
 
-.fail {
-    color: red;
+/*.fail {*/
+    /*color: red;*/
     /*background-color: #de5962*/
+/*}*/
+
+/*.fail:hover {*/
+    /*!*background-color: #de434d*!*/
+/*}*/
+
+.table > thead > tr > td.fail,
+.table > tbody > tr > td.fail,
+.table > tfoot > tr > td.fail,
+.table > thead > tr > th.fail,
+.table > tbody > tr > th.fail,
+.table > tfoot > tr > th.fail,
+.table > thead > tr.fail > td,
+.table > tbody > tr.fail > td,
+.table > tfoot > tr.fail > td,
+.table > thead > tr.fail > th,
+.table > tbody > tr.fail > th,
+.table > tfoot > tr.fail > th {
+    background-color: #f0b4b4;
 }
 
-.fail:hover {
-    background-color: #de434d
+.table-hover > tbody > tr > td.fail:hover,
+.table-hover > tbody > tr > th.fail:hover,
+.table-hover > tbody > tr.fail:hover > td,
+.table-hover > tbody > tr:hover > .fail,
+.table-hover > tbody > tr.fail:hover > th {
+    background-color: #eb9898;
+}
+
+.alert-fail {
+  color: #a94442;
+  background-color: #f0b4b4;
+  border-color: #ebccd1;
+}
+.alert-fail hr {
+  border-top-color: #e4b9c0;
+}
+.alert-fail .alert-link {
+  color: #843534;
 }
 
 /**************** HEADER *****************/
@@ -90,10 +125,11 @@ body {
 }
 
 .table-col-nowrap {
-    max-width: 26ch;
+    max-width: 16ch;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+
 }
 
 form {
@@ -167,7 +203,7 @@ textarea {
     margin-top: 12px;
 }
 
-.form-block hr{
+.form-block hr {
     margin-top: 10px;
 }
 

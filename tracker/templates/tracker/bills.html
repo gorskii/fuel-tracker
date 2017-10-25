@@ -31,17 +31,18 @@
                     <th>Сумма</th>
                     <th>Поставщик</th>
                     <th>Количество</th>
+                    <th>Дата сделки</th>
                     <th>Дата оплаты</th>
-                    <th>Дата отгрузки</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for bill in bills %}
                     {# В зависимости от статуса окрашивается строка #}
                     <tr class="table-row-clickable
-                        {% if bills_stat|key:bill == 3 %}info
-                        {% elif bills_stat|key:bill == 2 %}danger
-                        {% elif bills_stat|key:bill == 1 %}warning
+                        {% if bills_stat|key:bill == 5 %}danger
+                        {% elif bills_stat|key:bill == 4 %}fail
+                        {% elif bills_stat|key:bill == 2 %}warning
+                        {% elif bills_stat|key:bill == 1 %}info
                         {% elif bills_stat|key:bill == 0 %}success{% endif %}"
                         data-href="{% url 'tracker:bills_detail' bill.id %}">
                         <td>{{ bill.bill }}</td>
@@ -53,16 +54,12 @@
                         </td>
                         <td>{{ bill.amount.normalize }} р.</td>
                         <td>{{ bill.supplier }}</td>
-                        <td>{% if bill.total %}{{ bill.total.normalize }} кг{% endif %}</td>
+                        <td>{% if bill.volume %}{{ bill.volume }} т{% endif %}</td>
                         <td>{{ bill.bill_date|date:"d.m.Y" }}</td>
-                        <td {% for item in bill.railcars_set.all %}
-                            {% if railcars_stat|key:item == 1 %}
-                                class="fail"
-                            {% endif %}
-                        {% endfor %}
-                        >
-
-                            {{ bill.supply_date|date:"d.m.Y" }}</td>
+                        <td {% if bills_stat|key:bill == 0 and not bill.payment_date %}style="background-color: #f0b4b4"
+                            {% endif %}>
+                            {{ bill.payment_date|date:"d.m.Y" }}
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -71,10 +68,11 @@
         <div class="table__legend">
             <h5>Статус сделки</h5>
             <span class="track-status alert-success">Все вагоны успешно приняты</span>
-            <span class="track-status alert-info">Принята часть вагонов</span>
-            <span class="track-status alert-warning">Задержка одного из вагонов</span>
-            <span class="track-status alert-danger">Расхождения в количестве топлива</span>
-{#            <span class="track-status fail">Вагоны не приняты в срок</span>#}
+{#            <span class="track-status alert-warning">Задержка одного из вагонов</span>#}
+            <span class="track-status alert-warning">Расхождение больше тонны</span>
+            <span class="track-status alert-danger">Последний день оплаты</span>
+            <span class="track-status alert-fail">Сделка не оплачена в срок</span>
+            <span class="track-status alert-info">Не все вагоны приняты за 7 дней</span>
         </div>
     {% else %}
         Нет данных для отображения.
