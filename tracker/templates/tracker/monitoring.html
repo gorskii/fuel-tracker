@@ -123,12 +123,5 @@
     <script src="{% static 'tracker/js/bootstrap.min.js' %}" type="text/javascript"></script>
     <!-- Custom scripts -->
     <script src="{% static 'tracker/js/script.js' %}" type="text/javascript"></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('.table-col-nowrap').each(function () {
-                if ($(this).text()) $(this).attr('title', $(this).text());
-            });
-        });
-    </script>
     <!-->
 {% endblock %}

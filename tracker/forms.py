@@ -23,8 +23,8 @@ class RailcarsModelForm(forms.ModelForm):
         model = Railcars
         fields = ['railcar', 'fuel', 'volume']
 
-    class Media:
-        js = ('jquery.formset.js',)
+    # class Media:
+    #     js = ('jquery.formset.js',)
 
     def __init__(self, *args, **kwargs):
         super(RailcarsModelForm, self).__init__(*args, **kwargs)
