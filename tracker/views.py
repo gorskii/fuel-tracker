@@ -313,7 +313,7 @@ def get_bill_stat():
         # for item in railcars.filter(bill=railcar.bill):
         #     if item not in date_diff:
         #         bills_stat[railcar.bill] = 3
-        if abs(fuel_diff[railcar]) >= 1000:  # Погрешность
+        if abs(fuel_diff[railcar]) >= 100:  # Погрешность в кг
             bills_stat[railcar.bill] = 2
             # elif date_diff[railcar] < timezone.timedelta(0):
             #     bills_stat[railcar.bill] = 1
@@ -357,7 +357,7 @@ def get_tracks_stat():
         tracks_stat[railcar] = 0
 
     for railcar in date_diff:
-        if abs(fuel_diff[railcar]) >= 1000:  # Погрешность
+        if abs(fuel_diff[railcar]) >= 100:  # Погрешность в кг
             tracks_stat[railcar] = 2
         # if not railcar.is_released and timezone.now() - railcar.tracking_set.:
         #     tracks_stat[railcar] = 1

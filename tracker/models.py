@@ -81,7 +81,7 @@ class Tracking(models.Model):  # Отслеживание вагонов
                                     on_delete=models.PROTECT,
                                     verbose_name="сотрудник"
                                     )
-    release_time = models.DateTimeField(null=True, verbose_name='отпущен в ')
+    release_time = models.DateTimeField(null=True, blank=True, verbose_name='отпущен в ')
 
     class Meta:
         permissions = (

@@ -17,8 +17,8 @@
         {% load customfilters %}
         <p><b>Время:</b> {{ track.time|date:"j.m.Y H:i:s" }}</p>
         <p><b>Номер сделки:</b> {% if track.railcar.bill %}{{ track.railcar.bill }}{% endif %}</p>
-        <p><b>Тип топлива:</b> {{ track.railcar.fuel }} </p>
         <p><b>Поставщик:</b> {{ track.railcar.bill.supplier }}</p>
+        <p><b>Тип топлива:</b> {{ track.railcar.fuel }} </p>
         <p><b>Объем:</b> {{ track.amount.normalize }} кг
             {% with fuel_diff|key:track.railcar as diff %}
                 {% if diff > 0 %}
