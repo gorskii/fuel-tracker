@@ -24,7 +24,7 @@
                 <tr>
                     {#                    <th>№</th>#}
                     <th>Время</th>
-                    <th>Номер вагона</th>
+                    <th>Вагон</th>
                     <th>Номер сделки</th>
                     <th>Топливо</th>
                     {#<th>Производитель</th>#}
@@ -43,7 +43,7 @@
                         data-href="{% url 'tracker:track_detail' track.id %}">
                         {#                        <td><a href="{% url 'tracker:track_detail' track.id %}">{{ track.id }}</a></td>#}
                         <td>{{ track.time|date:"d.m.y H:i:s" }}</td>
-                        <td>{{ track.railcar }}</td>
+                        <td>{{ track.railcar.railcar }}</td>
                         <td>{% if track.railcar.bill %}{{ track.railcar.bill }}{% endif %}</td>
                         <td>{{ track.railcar.fuel }}</td>
                         {#<td>{{ track.railcar.fuel_brand }}</td>#}

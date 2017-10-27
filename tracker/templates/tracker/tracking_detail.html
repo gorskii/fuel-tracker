@@ -1,11 +1,11 @@
 {% extends 'tracker/base.html' %}
 
 {% block title %}
-    {{ track.railcar }}
+    Вагон {{ track.railcar.railcar }}
 {% endblock %}
 
 {% block header %}
-    <span class="header-title">Вагон {{ track.railcar }}</span>
+    <span class="header-title">Вагон {{ track.railcar.railcar }}</span>
     <nav>
         <a class="btn" href="{% url 'tracker:tracking' %}">Назад</a>
         <a class="btn btn-logout" href="{% url 'tracker:logout' %}">Выход</a>

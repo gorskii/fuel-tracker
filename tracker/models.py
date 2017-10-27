@@ -57,7 +57,7 @@ class Railcars(models.Model):  # Вагоны
         verbose_name_plural = 'вагоны'
 
     def __str__(self):
-        return str(self.railcar)
+        return "{}: {} - {:.0f} кг".format(self.railcar, self.fuel, self.volume)
 
 
 class Tracking(models.Model):  # Отслеживание вагонов
