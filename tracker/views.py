@@ -52,37 +52,12 @@ class TrackDetailView(LoginRequiredMixin, PermissionRequiredMixin, generic.Detai
         return context
 
 
-# class TrackCreateView(LoginRequiredMixin, PermissionRequiredMixin, generic.CreateView):
-#     permission_required = 'tracker.add_tracking'
-#     form_class = TrackingModelForm
-#     success_url = reverse_lazy('tracker:railcars')
-#     template_name = 'tracker/tracking_new.html'
-#     context_object_name = 'form'
-#
-#     def get_context_data(self, **kwargs):
-#         context = super(TrackCreateView, self).get_context_data(**kwargs)
-#         railcar_form = RailcarsModelForm()
-#         context['railcar'] = railcar_form
-#         return context
-#
-#     def form_valid(self, form):
-#         r = RailcarsModelForm(self.request.POST)
-#         # r.instance.railcar = self.request.POST['railcar']
-#         # r.instance.fuel = self.request.POST['fuel']
-#         # r.instance.volume = self.request.POST['volume']
-#         # Делаем отметку пользователя, принявшего вагон
-#         form.instance.accepted_by = self.request.user
-#         # Делаем пометку, что вагон принят
-#         r.instance.is_accepted = True
-#         r.instance.save()
-#         return super(TrackCreateView, self).form_valid(form)
-
-
 class BillsListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListView):  # Вью для вывода списка платежей
     permission_required = 'tracker.view_bills'
     template_name = 'tracker/bills.html'
     # Суммируем количество топлива по вагонам в поле total
-    queryset = Bills.objects.all().annotate(total=Sum('railcars__volume')).order_by('-bill_date', '-bill')
+    model = Bills
+    ordering = ['-bill_date', '-bill']
     context_object_name = 'bills'
 
     def get_context_data(self, **kwargs):
@@ -90,6 +65,7 @@ class BillsListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListVie
         context['bills_stat'] = get_bill_stat()
         context['railcars_stat'] = get_railcars_stat()
         context['railcars_available'] = get_railcars_available()
+        context['railcars_for_assign'] = Railcars.objects.filter(bill=None, is_accepted=True).order_by('railcar')
         # FIXME Возвращаются два идентичных элемента контекста, bills и object_list. Поправить, если возможоно
         return context
 

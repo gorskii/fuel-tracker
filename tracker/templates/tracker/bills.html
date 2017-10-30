@@ -21,6 +21,14 @@
 {% endblock %}
 
 {% block content %}
+    {% if railcars_for_assign %}
+        <div class="alert alert-info">
+            Есть принятые вагоны без информации о сделке:
+            {% for railcar in railcars_for_assign %}{% if not forloop.first %}, {% endif %}
+                {{ railcar.railcar }}{% endfor %}. Необходимо добавить вагоны в
+            соответствующих сделках.
+        </div>
+    {% endif %}
     {% if bills %}
         <div class="table-responsive">
             <table class="table table-striped table-hover table-bordered">
@@ -68,7 +76,7 @@
         <div class="table__legend">
             <h5>Статус сделки</h5>
             <span class="track-status alert-success">Все вагоны успешно приняты</span>
-{#            <span class="track-status alert-warning">Задержка одного из вагонов</span>#}
+            {#            <span class="track-status alert-warning">Задержка одного из вагонов</span>#}
             <span class="track-status alert-warning">Расхождение больше 100 кг</span>
             <span class="track-status alert-danger">Последний день оплаты</span>
             <span class="track-status alert-fail">Сделка не оплачена в срок</span>
