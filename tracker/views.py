@@ -4,8 +4,6 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required, permission_required
-from django.db.models import Sum
-from django.forms import inlineformset_factory, modelformset_factory
 from django.utils import timezone
 
 from .forms import RailcarsModelForm, RailcarAddForm, BillsModelForm, TrackingModelForm, MainLoginForm
@@ -15,7 +13,6 @@ from .models import Tracking, Bills, Railcars
 class TrackerView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListView):
     permission_required = 'tracker.add_tracking'
     template_name = 'tracker/tracking.html'
-    # queryset = Tracking.objects.all().order_by('-time')
     context_object_name = 'tracking_list'
 
     def get_queryset(self):
@@ -63,31 +60,8 @@ class BillsListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListVie
     def get_context_data(self, **kwargs):
         context = super(BillsListView, self).get_context_data(**kwargs)
         context['bills_stat'] = get_bill_stat()
-        context['railcars_stat'] = get_railcars_stat()
         context['railcars_available'] = get_railcars_available()
         context['railcars_for_assign'] = Railcars.objects.filter(bill=None, is_accepted=True).order_by('railcar')
-        # FIXME Возвращаются два идентичных элемента контекста, bills и object_list. Поправить, если возможоно
-        return context
-
-
-class BillsDetailView(LoginRequiredMixin, PermissionRequiredMixin, generic.DetailView):
-    """ This class based view replaced by bill_detail view below """
-
-    permission_required = 'tracker.view_bills'
-    model = Bills
-    context_object_name = 'bill'
-    template_name_suffix = '_detail'
-
-    def get_context_data(self, **kwargs):
-        context = super(BillsDetailView, self).get_context_data(**kwargs)
-        railcars = self.object.railcars_set.all().order_by('railcar')
-        context['railcars_list'] = railcars
-        context['fuel_total'] = railcars.aggregate(Sum('volume')).get('volume__sum', 0.00)
-        context['fuel_diff'] = get_fuel_diff(railcars)
-        context['date_diff'] = get_date_diff(railcars)
-        context['railcars_stat'] = get_railcars_stat()
-        context['railcars_form'] = RailcarAddForm()
-
         return context
 
 
@@ -99,10 +73,8 @@ def bill_detail(request, pk):
     railcars = bill.railcars_set.all().order_by('railcar')
     context['bill'] = bill
     context['railcars_list'] = railcars
-    # context['fuel_total'] = railcars.aggregate(Sum('volume')).get('volume__sum', 0.00)
     context['fuel_diff'] = get_fuel_diff(railcars)
     context['date_diff'] = get_date_diff(railcars)
-    context['railcars_stat'] = get_railcars_stat()
     context['railcars_available'] = get_railcars_available(bill)
     if request.method == 'POST':
         railcar = get_object_or_404(Railcars, pk=request.POST['railcar'])
@@ -130,32 +102,14 @@ def railcar_free(request, pk):
 @login_required
 @permission_required('tracker.add_bills')
 def bill_create(request):
-    # railcar_formset = inlineformset_factory(Bills, Railcars,
-    #                                         form=RailcarsModelForm,
-    #                                         extra=0,
-    #                                         min_num=1,
-    #                                         validate_min=True,
-    #                                         can_delete=False)
+    """ Представление для добавления сделки """
     if request.method == 'POST':
         bill_form = BillsModelForm(request.POST)
         if bill_form.is_valid():
             bill_form.save()
             return HttpResponseRedirect(reverse_lazy('tracker:bills'))
-            #     created_bill = bill_form.save(commit=False)
-            #     formset = railcar_formset(request.POST, instance=created_bill)
-            #     if formset.is_valid():
-            #         created_bill.save()
-            #         formset.save()
-            #         return HttpResponseRedirect(reverse_lazy('tracker:bills'))
-            # else:
-            #     formset = railcar_formset(request.POST)
     else:
         bill_form = BillsModelForm()
-        # bill = Bills()
-        # formset = railcar_formset(instance=bill)
-    # return render(request, 'tracker/bills_new.html',
-    #               {'bill_form': bill_form,
-    #                'railcars_formset': formset})
     return render(request, 'tracker/bills_new.html', {'bill_form': bill_form})
 
 
@@ -183,7 +137,6 @@ class MonitoringView(TrackerView):
         context = super(MonitoringView, self).get_context_data(**kwargs)
         context['tracks_stat'] = get_tracks_stat()
         context['railcars_list'] = Railcars.objects.filter(is_accepted=False).order_by('bill__payment_date')
-        context['railcars_stat'] = get_railcars_stat()
         return context
 
 
@@ -200,6 +153,10 @@ class IndexView(LoginRequiredMixin, generic.TemplateView):
 @login_required
 @permission_required('tracker.add_tracking')
 def track_create(request):
+    """
+    Представление для добавления трека.
+    Здесь же, в связи с изменением логики, реализовано добавление вагона
+    """
     if request.method == 'POST':
         railcar_form = RailcarsModelForm(request.POST)
         if railcar_form.is_valid():
@@ -225,7 +182,7 @@ def track_create(request):
 def get_fuel_diff(railcars):
     """
     Получить разницы в количестве топлива
-    :return: Словарь разниц между количеством топлива в платеже и фактически принятым
+    :return: Словарь разниц между количеством топлива по накладной и фактически принятым
     :rtype: dict
     """
     diff = {}
@@ -273,7 +230,7 @@ def get_bill_stat():
     0 - успешно принят
     1 - неделя с даты оплаты, есть непринятые вагоны
     2 - различие в количестве топлива
-    3 - в процессе приёма
+    3 - в процессе приёма (исключено в связи с изменением логики)
     4 - просрочка даты оплаты
     5 - последний день оплаты
     """
@@ -286,13 +243,8 @@ def get_bill_stat():
         bills_stat[railcar.bill] = 0
 
     for railcar in date_diff:
-        # for item in railcars.filter(bill=railcar.bill):
-        #     if item not in date_diff:
-        #         bills_stat[railcar.bill] = 3
         if abs(fuel_diff[railcar]) >= 100:  # Погрешность в кг
             bills_stat[railcar.bill] = 2
-            # elif date_diff[railcar] < timezone.timedelta(0):
-            #     bills_stat[railcar.bill] = 1
 
     today = timezone.now().date()
 
@@ -321,7 +273,7 @@ def get_tracks_stat():
 
     Статус:
     0 - успешно принят
-    1 - просрочка даты поставки
+    1 - просрочка даты поставки (исключено, проверяется в get_bill_stat)
     2 - различие в количестве топлива
     """
     tracks_stat = {}
@@ -335,45 +287,12 @@ def get_tracks_stat():
     for railcar in date_diff:
         if abs(fuel_diff[railcar]) >= 100:  # Погрешность в кг
             tracks_stat[railcar] = 2
-        # if not railcar.is_released and timezone.now() - railcar.tracking_set.:
-        #     tracks_stat[railcar] = 1
 
     return tracks_stat
 
 
-def get_railcars_stat():
-    """
-    Получить статусы непринятых вагонов
-    :return: Словарь Вагон : Статус
-    :rtype: dict
-
-    Статус:
-    0 - день поставки ещё не настал
-    1 - просрочка даты поставки
-    2 - поставка сегодня
-    """
-    railcars_stat = {}
-    railcars = Railcars.objects.filter(is_accepted=False)
-    today = timezone.localdate()
-    now = timezone.now()
-
-    for railcar in railcars:
-        if railcar.bill.payment_date is None:
-            d = railcar.bill.bill_date + timezone.timedelta(days=5)
-        else:
-            d = railcar.bill.payment_date
-        # За конец дня принимаем 18:00 даты отгрузки
-        end = timezone.make_aware(timezone.datetime(d.year, d.month, d.day)) + timezone.timedelta(hours=18)
-        if now >= end:
-            railcars_stat[railcar] = 1  # просрочен
-        elif d == today:
-            railcars_stat[railcar] = 2  # прием сегодня
-        else:
-            railcars_stat[railcar] = 0  # время ещё не пришло
-    return railcars_stat
-
-
 def get_railcars_count(bill):
+    """ Вычисляет количество вагонов исходя из количества закупленного топлива """
     if bill.volume > 0:
         count = bill.volume // 61 + 1
     else:
@@ -382,6 +301,10 @@ def get_railcars_count(bill):
 
 
 def get_railcars_available(bill=None):
+    """
+    Вычисляет, сколько ещё вагонов можно привязать к сделке.
+    Возвращает словарь значений или значение, если указан аргумент.
+    """
     if bill:
         railcars_assigned_count = bill.railcars_set.count()
         return get_railcars_count(bill) - railcars_assigned_count

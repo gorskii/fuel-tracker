@@ -11,15 +11,6 @@ body {
     margin-bottom: 50px;
 }
 
-/*.fail {*/
-    /*color: red;*/
-    /*background-color: #de5962*/
-/*}*/
-
-/*.fail:hover {*/
-    /*!*background-color: #de434d*!*/
-/*}*/
-
 .table > thead > tr > td.fail,
 .table > tbody > tr > td.fail,
 .table > tfoot > tr > td.fail,
@@ -68,7 +59,6 @@ body {
 .header__content {
     position: relative;
     margin-top: 16px;
-    /*width: 100%;*/
 }
 
 .header-title {
@@ -103,8 +93,6 @@ body {
 
 .main {
     min-height: 100%;
-    /*padding-top: 130px; !* Отступ для шапки *!*/
-    /*padding-bottom: 50px;*/
 }
 
 .main .container {
@@ -135,7 +123,6 @@ body {
 form {
     display: block;
     position: relative;
-    /*margin: 16px 0px 16px 0px;*/
     width: 100%;
 }
 
@@ -164,10 +151,7 @@ td .btn__release {
 }
 
 #id_railcar, #id_amount {
-    /*display: inline-block;*/
-    /*float: right;*/
     height: 2.5em;
-    /*width: 150px;*/
     width: 100%;
 }
 
@@ -177,11 +161,8 @@ label {
 }
 
 textarea {
-    /*position: relative;*/
     width: 100%;
-    /*height: 100%;*/
     height: 8em;
-    /*margin-bottom: 20px;*/
     resize: none;
 }
 
@@ -260,7 +241,6 @@ textarea {
     border: 1px solid lightgray;
     background-color: #fff;
     display: block;
-    /*padding: 5px 5px;*/
     margin: 12px 12px;
     text-align: center;
     font-size: 1.25em;
@@ -274,7 +254,6 @@ textarea {
     width: 100%;
     height: 50px;
     bottom: 0;
-    /*margin-top: -50px;*/
     color: #666;
     background-color: #333;
 }

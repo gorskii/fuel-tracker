@@ -10,7 +10,6 @@
     </nav>
 {% endblock %}
 {% block content %}
-{#    {% if form.railcar|length > 1 %} {# проверка на наличие непринятых вагонов #}
         <form action="" method="post">
             {% csrf_token %}
             {% for field in railcar %}
@@ -49,7 +48,4 @@
                 </div>
             </div>
         </form>
-{#    {% else %}#}
-{#        <p>Нет вагонов, ожидающих приема.</p>#}
-{#    {% endif %}#}
 {% endblock %}

@@ -22,12 +22,10 @@
             <table class="table table-striped table-hover">
                 <thead>
                 <tr>
-                    {#                    <th>№</th>#}
                     <th>Время</th>
                     <th>Вагон</th>
                     <th>Номер сделки</th>
                     <th>Топливо</th>
-                    {#<th>Производитель</th>#}
                     <th>По накладной</th>
                     <th>Факт.</th>
                     <th>Комментарий</th>
@@ -37,16 +35,12 @@
                 </thead>
                 <tbody>
                 {% for track in tracking_list %}
-                    <tr class="table-row-clickable {% if tracks_stat|key:track.railcar == 2 %}danger{% endif %}
-{#                                                   {% if tracks_stat|key:track.railcar == 1 %}warning{% endif %}#}
-{#                                                   {% if tracks_stat|key:track.railcar == 0 %}success{% endif %}#}"
+                    <tr class="table-row-clickable {% if tracks_stat|key:track.railcar == 2 %}danger{% endif %}"
                         data-href="{% url 'tracker:track_detail' track.id %}">
-                        {#                        <td><a href="{% url 'tracker:track_detail' track.id %}">{{ track.id }}</a></td>#}
                         <td>{{ track.time|date:"d.m.y H:i:s" }}</td>
                         <td>{{ track.railcar.railcar }}</td>
                         <td>{% if track.railcar.bill %}{{ track.railcar.bill }}{% endif %}</td>
                         <td>{{ track.railcar.fuel }}</td>
-                        {#<td>{{ track.railcar.fuel_brand }}</td>#}
                         <td>{{ track.railcar.volume.normalize }} кг</td>
                         <td>{{ track.amount.normalize }} кг</td>
                         <td class="table-col-nowrap">{{ track.comment }}</td>
@@ -67,8 +61,6 @@
         </div>
         <div class="table__legend">
             <h5>Статус вагона</h5>
-            {#            <span class="track-status alert-success">Вагон успешно принят</span>#}
-            {#            <span class="track-status alert-warning">Задержка вагона</span>#}
             <span class="track-status alert-danger">Расхождение больше 100 кг</span>
         </div>
         <hr/>

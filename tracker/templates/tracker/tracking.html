@@ -26,9 +26,7 @@
                     <th>№</th>
                     <th>Время</th>
                     <th>Номер вагона</th>
-                    {#<th>Номер платежа</th>#}
                     <th>Топливо</th>
-                    {#<th>Производитель</th>#}
                     <th>Количество</th>
                     <th>Комментарий</th>
                     <th>Отпущен</th>
@@ -40,9 +38,7 @@
                         <td>{{ track.id }}</td>
                         <td>{{ track.time|date:"d.m.y H:i:s" }}</td>
                         <td>{{ track.railcar.railcar }}</td>
-                        {#<td>{{ track.railcar.bill }}</td>#}
                         <td>{{ track.railcar.fuel }}</td>
-                        {#<td>{{ track.railcar.fuel_brand }}</td>#}
                         <td>{{ track.amount.normalize }} кг</td>
                         <td>{{ track.comment }}</td>
                         <td>

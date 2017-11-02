@@ -11,7 +11,3 @@ $(document).ready(function ($) {
         window.location.reload();
     }, 60000);
 });
-
-// function addForm() {
-//     form = document.getElementsByClassName("form__railcar")
-// }

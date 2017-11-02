@@ -22,8 +22,8 @@ def to_date(value: timezone.timedelta):
         days = value.days
         if days == 1:
             days = 0
-    hours, reminder = divmod(value.seconds, 3600)
-    minutes, seconds = divmod(reminder, 60)
+    hours, remainder = divmod(value.seconds, 3600)
+    minutes, seconds = divmod(remainder, 60)
     if days > 4:
         suffix = 'дней'
     elif days == 1:

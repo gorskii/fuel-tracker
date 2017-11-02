@@ -42,10 +42,6 @@
                 <p><b>Добавить вагон к сделке:</b></p>
             </div>
             {% csrf_token %}
-            {#        {{ railcars_formset.management_form }}#}
-            {#        {% for form in railcars_formset %}#}
-            {#            <div class="form__railcar">#}
-            {#                <hr/>#}
             {% for field in railcars_form %}
                 <div class="row form-group">
                     <div class="col-xs-3">
@@ -60,8 +56,8 @@
                     </div>
                 </div>
             {% endfor %}
-            {#            </div>#}
-            {#        {% endfor %}#}
+            {# Предупреждаем, если вагонов уже достаточно. #}
+            {# Аттрибут hidden снимается через jQuery при попытке добавить ещё один. #}
             {% if railcars_available <= 0 %}
                 <div id="limit-alert" class="alert alert-warning hidden">
                     <small>Количество вагонов превысит норму для купленного топлива (1 на каждые 60 тонн).
@@ -94,9 +90,6 @@
                 </thead>
                 <tbody>
                 {% for railcar in railcars_list %}
-                    {#                    <tr class="{% if railcars_stat|key:railcar == 2 %}info{% endif %}#}
-                    {#                               {% if railcars_stat|key:railcar == 1 %}danger{% endif %}#}
-                    {#                               ">#}
                     <tr>
                         <td>{{ railcar.railcar }}</td>
                         <td>{{ railcar.fuel }}</td>
@@ -125,11 +118,6 @@
                                 {% for track in railcar.tracking_set.all %}
                                     {{ track.time|date:"j.m.Y H:i:s" }} &nbsp;
                                 {% endfor %}
-                                {#                                {% with date_diff|key:railcar as date %}#}
-                                {#                                    {% if date.days < 0 %}#}
-                                {#                                        <span class="alert-warning">Задержка на {{ date|to_date }}</span>#}
-                                {#                                    {% endif %}#}
-                                {#                                {% endwith %}#}
                             {% endif %}
                         </td>
                         <td>
@@ -157,13 +145,6 @@
                 {% endfor %}
                 </tbody>
             </table>
-            {#            <div class="table__legend">#}
-            {#                <h5>Статус вагона</h5>#}
-            {#                <span class="track-status alert-info">Отгрузка сегодня</span>#}
-            {#                <span class="track-status alert-danger">Не принят в срок</span>#}
-            {#                <span class="track-status alert-info">Вагон ещё на базе</span>#}
-            {#                <span class="track-status alert-success">Вагон отпущен</span>#}
-            {#            </div>#}
         </div>
     {% endif %}
 {% endblock %}
@@ -172,6 +153,7 @@
     <!-- Bootstrap scripts and jQuery support -->
     <script src="{% static 'tracker/js/jquery-3.2.1.min.js' %}" type="text/javascript"></script>
     <script type="text/javascript">
+        {# Выводим уведомление о превышении количества вагонов при привязке еще одного. #}
         $(document).ready(function () {
             $('#id_railcar').change(function () {
                 $('#limit-alert').toggleClass('hidden');

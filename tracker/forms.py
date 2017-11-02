@@ -47,17 +47,6 @@ class RailcarAddForm(forms.ModelForm):
     class Meta:
         model = Railcars
         fields = ('railcar',)
-    # queryset = Railcars.objects.filter(bill=None)
-
-    # class Media:
-    #     js = ('jquery.formset.js',)
-
-    # def __init__(self, *args, **kwargs):
-    #     super(RailcarsModelForm, self).__init__(*args, **kwargs)
-    #     self.fields['railcar'].queryset = Railcars.objects.filter(bill=None)
-        # self.fields['railcar'].widget.attrs = {'class': 'form-control',
-                                               # 'required': True,
-                                               # }
 
 
 class TrackingModelForm(forms.ModelForm):
@@ -68,9 +57,6 @@ class TrackingModelForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(TrackingModelForm, self).__init__(*args, **kwargs)
-        # self.fields['railcar'].queryset = Railcars.objects.filter(is_accepted=False).order_by('railcar')
-        # self.fields['railcar'].widget.attrs = {'class': 'form-control'}
-        # self.fields['railcar'].empty_label = 'Выберите вагон'
         self.fields['amount'].widget.attrs = {'class': 'form-control',
                                               'min': '1',
                                               'max': '60000'}
